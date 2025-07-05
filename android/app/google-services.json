@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035356635294",
+    "project_id": "vintage-c55d3",
+    "storage_bucket": "vintage-c55d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035356635294:android:f9cbd74f973934400ffb8f",
+        "android_client_info": {
+          "package_name": "com.victorartonomy.vintage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdeimku5qHDpNf6nC-P3GeBzas2pgaQ9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
