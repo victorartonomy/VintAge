@@ -72,4 +72,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'vintage-c55d3.firebasestorage.app',
     iosBundleId: 'com.victorartonomy.vintage',
   );
+
 }
