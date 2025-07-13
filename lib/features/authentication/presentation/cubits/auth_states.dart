@@ -11,8 +11,8 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class Authenticated extends AuthState {
-  final AppUser;
-  Authenticated(this.AppUser);
+  final appUser;
+  Authenticated(this.appUser);
 }
 
 class Unauthenticated extends AuthState {}

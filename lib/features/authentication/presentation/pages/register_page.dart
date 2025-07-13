@@ -1,9 +1,10 @@
 /*
 
-Login Page
+Register Page
 
-On this page, an existing user can login with their:
+On this page, an existing user can register with their:
 - email
+- name
 - pw
 
 --------------------------------------------------
@@ -17,50 +18,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/authentication/presentation/components/my_button.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
+import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 
-import '../cubits/auth_cubit.dart';
-
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? togglePages;
-  const LoginPage({super.key, required this.togglePages});
+  const RegisterPage({super.key, required this.togglePages});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPage();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPage extends State<RegisterPage> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController confirmPwController = TextEditingController();
   TextEditingController pwController = TextEditingController();
 
-  // when login pressed
-  void login() {
+  // Register function
+  void register() {
 
-    // get the string from controller
-    final String email = emailController.text;
-    final String password = pwController.text;
+    // String
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String pw = pwController.text.trim();
+    String confirmPw = confirmPwController.text.trim();
 
-    // get auth cubit
+    // authCubit
     final authCubit = context.read<AuthCubit>();
 
-    // ensure email and password are not empty
-    if (email.isNotEmpty && password.isNotEmpty) {
-      authCubit.login(email, password);
+    // ensure fields arnt empty
+    if (name.isNotEmpty && email.isNotEmpty && pw.isNotEmpty && confirmPw.isNotEmpty) {
+
+      // if passwords match
+      if (pw == confirmPw) {
+        authCubit.register(email, pw, name);
+      }
+
+      // if passwords don't match
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Passwords do not match"),
+          ),
+        );
+      }
     }
 
-    // else display error
+    // if fields are empty
     else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please enter both email and password"),
+          content: Text("All fields must be filled"),
         ),
       );
     }
   }
 
+  // dispose controllers
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
     pwController.dispose();
+    confirmPwController.dispose();
     super.dispose();
   }
 
@@ -76,11 +96,11 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 // Logo
                 Icon(
-                  Icons.lock_open_outlined,
+                  Icons.flutter_dash,
                   size: 120,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                SizedBox(height: 25),
+                SizedBox(height: 10),
 
                 // Welcome
                 Text(
@@ -91,6 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 25),
+
+                // Name
+                MyTextField(
+                  controller: nameController,
+                  hintText: "Enter Name",
+                  obscureText: false,
+                ),
+                SizedBox(height: 10),
 
                 // Email
                 MyTextField(
@@ -106,10 +134,18 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Enter Password",
                   obscureText: true,
                 ),
+                SizedBox(height: 10),
+
+                // Confirm Password
+                MyTextField(
+                  controller: confirmPwController,
+                  hintText: "Re-Enter Password",
+                  obscureText: true,
+                ),
                 SizedBox(height: 25),
 
-                // Login Button
-                MyButton(onTap: login, text: "Login"),
+                // Register Button
+                MyButton(onTap: register, text: "Register"),
                 SizedBox(height: 10),
 
                 // Go to register button
@@ -117,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "Not a Member?",
+                      "Already a Member?",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 15,
@@ -126,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                     GestureDetector(
                       onTap: widget.togglePages,
                       child: Text(
-                        " Register",
+                        " Login",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary,
                           fontSize: 15,
