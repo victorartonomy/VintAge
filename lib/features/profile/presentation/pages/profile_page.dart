@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/profile/presentation/components/bio_box.dart';
@@ -72,17 +73,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 25),
 
                 // profile picture
-                Container(
-                  padding: const EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(12),
+                CachedNetworkImage(
+                  imageUrl: user.profileImageUrl,
+                  // loading
+                  placeholder:
+                      (context, url) => const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                  child: Icon(
+
+                  // error -> failed to load
+                  errorWidget:
+                      (context, url, error) => Icon(
                     Icons.person,
                     size: 72,
                     color: Theme.of(context).colorScheme.primary,
                   ),
+
+                  // loaded
+                  imageBuilder:
+                      (context, imageProvider) =>
+                      Container(
+                        height: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover)
+                          ),
+                      ),
                 ),
                 const SizedBox(height: 25),
 
@@ -101,7 +118,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                BioBox(text: user.bio),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: BioBox(text: user.bio),
+                ),
                 const SizedBox(height: 50),
 
                 // posts
