@@ -5,13 +5,15 @@ import 'package:vintage/features/profile/domain/repos/profile_repo.dart';
 import 'package:vintage/features/profile/presentation/cubits/profile_states.dart';
 import 'package:vintage/features/storage/domain/storage_repo.dart';
 
+import '../../domain/entities/profile_user.dart';
+
 class ProfileCubit extends Cubit<ProfileStates>{
   final ProfileRepository profileRepo;
   final StorageRepo storageRepo;
 
   ProfileCubit({required this.profileRepo, required this.storageRepo}):super(ProfileInitial());
 
-  // fetch user profile using repo
+  // fetch user profile using repo -> useful for loading single profile pages
   Future<void> fetchUserProfile(String uid) async {
     try {
       emit(ProfileLoading());
@@ -26,6 +28,12 @@ class ProfileCubit extends Cubit<ProfileStates>{
     catch (e) {
       emit(ProfileError(e.toString()));
     }
+  }
+
+  // return user profile given uid -> useful for loading many profiles for posts
+  Future<ProfileUser?> getUserProfile(String uid) async {
+    final user = await profileRepo.fetchUserProfile(uid);
+    return user;
   }
 
   // update bio and profile picture

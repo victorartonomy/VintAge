@@ -17,13 +17,13 @@ class PostCubit extends Cubit<PostStates> {
       // handle image upload for mobile platforms (using file path)
       if (imagePath != null) {
         emit(PostsUploading());
-        imageUrl = await storageRepo.uploadProfileImageMobile(imagePath, post.id);
+        imageUrl = await storageRepo.uploadPostImageMobile(imagePath, post.id);
       }
 
       // handle image upload for web platforms (using file bytes)
       else if (imageBytes != null) {
         emit(PostsUploading());
-        imageUrl = await storageRepo.uploadProfileImageWeb(imageBytes, post.id);
+        imageUrl = await storageRepo.uploadPostImageWeb(imageBytes, post.id);
       }
 
       // give imageUrl to Post
@@ -31,6 +31,9 @@ class PostCubit extends Cubit<PostStates> {
 
       // create post in backend
       postRepo.createPost(newPost);
+
+      // re-fetch all posts
+      fetchAllPosts();
     }
     catch (e) {
       emit(PostsError("Failed to create post: $e"));
@@ -56,6 +59,16 @@ class PostCubit extends Cubit<PostStates> {
     }
     catch (e) {
       emit(PostsError("Failed to delete post: $e"));
+    }
+  }
+
+  // toggle likes
+  Future<void> toggleLikePost(String postId, String userId) async {
+    try {
+      await postRepo.toggleLikePost(postId, userId);
+    }
+    catch (e) {
+      emit(PostsError("Failed to toggle like: $e"));
     }
   }
 }

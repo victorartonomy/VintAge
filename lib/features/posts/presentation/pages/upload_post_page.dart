@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
+import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
+import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
 
 import '../cubits/post_cubits.dart';
 
@@ -77,6 +80,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
       text: captionController.text,
       imageUrl: '',
       timestamp: DateTime.now(),
+      likes: [],
     );
 
     // post cubit
@@ -86,7 +90,6 @@ class _UploadPostPageState extends State<UploadPostPage> {
     if (kIsWeb) {
       postCubit.createPost(newPost, imageBytes: imagePickedFile?.bytes);
     }
-
     // mobile upload
     else {
       postCubit.createPost(newPost, imagePath: imagePickedFile?.path);
@@ -102,11 +105,74 @@ class _UploadPostPageState extends State<UploadPostPage> {
   // BUILD UI
   @override
   Widget build(BuildContext context) {
+    // BLOC Consumer -> builder + Listener
+    return BlocConsumer<PostCubit, PostStates>(
+      builder: (context, state) {
+        // loading or uploading
+        if (state is PostsLoading || state is PostsUploading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        // Build Upload Page
+        return buildUploadPage();
+      },
+
+      // go to the previous page when the post is uploaded and loaded
+      listener: (context, state) {
+        if (state is PostsLoaded) {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
+
+  Widget buildUploadPage() {
+    // Scaffold
     return Scaffold(
+
+      // App Bar
       appBar: AppBar(
-        title: const Text("Create a Post"),
+        title: const Text("Upload Post"),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.primary,
+        actions: [
+          // upload button
+          IconButton(onPressed: uploadPost, icon: const Icon(Icons.upload)),
+        ],
+      ),
+
+      // body
+      body: Center(
+        child: Column(
+          children: [
+            // image preview for web
+            if (kIsWeb && webImage != null) Image.memory(webImage!),
+
+            // image preview for mobile
+            if (!kIsWeb && imagePickedFile != null)
+              SizedBox(
+                height: 430,
+                width: double.infinity,
+                child: Image.file(File(imagePickedFile!.path!)),
+              ),
+
+            // button to pick image
+            MaterialButton(
+              onPressed: pickImage,
+              color: Theme.of(context).colorScheme.primary,
+              child: const Text('Pick Image'),
+            ),
+
+            // caption text box
+            MyTextField(
+              controller: captionController,
+              hintText: "Enter Caption",
+              obscureText: false,
+            ),
+          ],
+        ),
       ),
     );
   }
