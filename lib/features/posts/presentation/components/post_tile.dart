@@ -74,20 +74,20 @@ class _PostTileState extends State<PostTile> {
     setState(() {
       if (isLiked) {
         widget.post.likes.remove(currentUser!.uid); // unlike
-      }
-      else {
+      } else {
         widget.post.likes.add(currentUser!.uid); // like
       }
     });
 
     // update like
-    postCubit.toggleLikePost(widget.post.id, currentUser!.uid).catchError((error) {
+    postCubit.toggleLikePost(widget.post.id, currentUser!.uid).catchError((
+      error,
+    ) {
       // if error, undo like
       setState(() {
         if (isLiked) {
           widget.post.likes.add(currentUser!.uid); // revert unlike
-        }
-        else {
+        } else {
           widget.post.likes.remove(currentUser!.uid); // revert like
         }
       });
@@ -134,7 +134,6 @@ class _PostTileState extends State<PostTile> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-
                 // profile pic
                 postUser?.profileImageUrl != null
                     ? CachedNetworkImage(
@@ -155,25 +154,27 @@ class _PostTileState extends State<PostTile> {
                           ),
                     )
                     : const Icon(Icons.person),
-                const SizedBox(width: 20,),
+                const SizedBox(width: 20),
 
                 // name
                 Text(
                   widget.post.userName,
-                  style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                 ),
 
                 const Spacer(),
 
                 // delete
                 if (isOwnPost)
-                IconButton(
-                  onPressed: showOptions,
-                  icon: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).colorScheme.primary,
+                  IconButton(
+                    onPressed: showOptions,
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -200,20 +201,23 @@ class _PostTileState extends State<PostTile> {
                     widget.post.likes.contains(currentUser!.uid)
                         ? Icons.favorite
                         : Icons.favorite_border,
-                    color: widget.post.likes.contains(currentUser!.uid)
-                        ? Colors.red
-                        : Theme.of(context).colorScheme.primary,
+                    color:
+                        widget.post.likes.contains(currentUser!.uid)
+                            ? Colors.red
+                            : Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 // count
-                Text(widget.post.likes.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.primary),),
-                const SizedBox(width: 20,),
+                Text(
+                  widget.post.likes.length.toString(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 20),
 
                 // comment
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.comment),
-                ),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.comment)),
                 Text("0"),
                 const Spacer(),
 
