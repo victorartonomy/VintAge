@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vintage/features/posts/domain/entities/comment.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
 import 'package:vintage/features/posts/domain/repos/post_repo.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
@@ -69,6 +70,27 @@ class PostCubit extends Cubit<PostStates> {
     }
     catch (e) {
       emit(PostsError("Failed to toggle like: $e"));
+    }
+  }
+
+  // add comment to a post
+  Future<void> addComment(String postId, Comment comment) async {
+    try {
+      await postRepo.addComment(postId, comment);
+
+      await fetchAllPosts();
+    } catch (e) {
+      emit(PostsError("Failed to add comment: $e"));
+    }
+  }
+
+  // delete comment from a post
+  Future<void> deleteComment(String postId, String commentId) async {
+    try {
+      await postRepo.deleteComment(postId, commentId);
+      await fetchAllPosts();
+    } catch (e) {
+      emit(PostsError("Failed to delete comment: $e"));
     }
   }
 }
