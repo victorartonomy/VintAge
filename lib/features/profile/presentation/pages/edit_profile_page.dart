@@ -10,6 +10,8 @@ import 'package:vintage/features/profile/domain/entities/profile_user.dart';
 import 'package:vintage/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:vintage/features/profile/presentation/cubits/profile_states.dart';
 
+import '../../../../responsive/constrained_scaffold.dart';
+
 class EditProfilePage extends StatefulWidget {
   final ProfileUser user;
   const EditProfilePage({super.key, required this.user});
@@ -99,7 +101,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget buildEditPage() {
-    return Scaffold(
+    return ConstrainedScaffold(
+
+      backgroundColor: Theme.of(context).colorScheme.surface,
+
       appBar: AppBar(
         title: const Text("Edit Profile"),
         centerTitle: true,

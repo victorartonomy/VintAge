@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/profile/presentation/components/user_tile.dart';
 import 'package:vintage/features/search/presentation/cubits/search_states.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../cubits/search_cubit.dart';
 
@@ -39,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     // Build UI
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.surface,
 

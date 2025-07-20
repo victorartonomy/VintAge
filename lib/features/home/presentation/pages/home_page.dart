@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/posts/presentation/components/post_tile.dart';
+import '../../../../responsive/constrained_scaffold.dart';
 import '../../../posts/presentation/cubits/post_cubits.dart';
 import '../../../posts/presentation/cubits/post_states.dart';
 import '../../../posts/presentation/pages/upload_post_page.dart';
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   // Build UI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.surface,
 

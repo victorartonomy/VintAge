@@ -27,9 +27,7 @@ class FirebaseAuthRepo implements AuthRepo {
     }
 
     // user logged in
-    else {
-      return AppUser(email: firebaseUser.email!, name: userDoc['name'], uid: firebaseUser.uid);
-    }
+    return AppUser(email: firebaseUser.email!, name: userDoc['name'], uid: firebaseUser.uid);
   }
 
   @override

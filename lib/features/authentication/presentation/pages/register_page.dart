@@ -20,6 +20,8 @@ import 'package:vintage/features/authentication/presentation/components/my_butto
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 
+import '../../../../responsive/constrained_scaffold.dart';
+
 class RegisterPage extends StatefulWidget {
   final void Function()? togglePages;
   const RegisterPage({super.key, required this.togglePages});
@@ -86,7 +88,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.surface,
 

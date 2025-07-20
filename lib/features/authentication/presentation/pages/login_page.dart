@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/authentication/presentation/components/my_button.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../cubits/auth_cubit.dart';
 
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.surface,
 

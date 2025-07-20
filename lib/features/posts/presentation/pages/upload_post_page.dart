@@ -9,6 +9,7 @@ import 'package:vintage/features/authentication/presentation/components/my_text_
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../cubits/post_cubits.dart';
 
@@ -131,7 +132,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
 
   Widget buildUploadPage() {
     // Scaffold
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.surface,
 

@@ -4,6 +4,8 @@ AuthStates
 
  */
 
+import '../../domain/entities/app_user.dart';
+
 abstract class AuthState {}
 
 class AuthInitial extends AuthState {}
@@ -11,7 +13,7 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class Authenticated extends AuthState {
-  final appUser;
+  final AppUser appUser;
   Authenticated(this.appUser);
 }
 
