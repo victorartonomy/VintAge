@@ -37,12 +37,7 @@ class ProfileCubit extends Cubit<ProfileStates>{
   }
 
   // update bio and profile picture
-  Future<void> updateProfile({
-    required String uid,
-    String? newBio,
-    Uint8List? imageWebBytes,
-    String? imageMobilePath,
-  }) async {
+  Future<void> updateProfile({required String uid, String? newBio, Uint8List? imageWebBytes, String? imageMobilePath,}) async {
     emit(ProfileLoading());
 
     try {
@@ -92,6 +87,19 @@ class ProfileCubit extends Cubit<ProfileStates>{
     }
     catch (e) {
       emit(ProfileError("Error updating profile: $e"));
+    }
+  }
+
+  // toggle follow method
+  Future<void> toggleFollow(String currentUserId, String targetUserId) async {
+    try {
+      await profileRepo.toggleFollow(currentUserId, targetUserId);
+
+      // this is unoptimistic
+      // await fetchUserProfile(targetUserId);
+    }
+    catch (e) {
+      emit(ProfileError("Error toggling follow: $e"));
     }
   }
 }

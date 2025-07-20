@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vintage/features/search/presentation/pages/search_page.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 import 'my_drawer_tile.dart';
@@ -53,16 +54,26 @@ class _MyDrawerState extends State<MyDrawer> {
 
                     // navigate to profile page
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(uid: uid,),
-                        ),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(uid: uid),
+                      ),
                     );
                   },
                 ),
 
                 // search tile
-                MyDrawerTile(title: "Search", icon: Icons.search, onTap: () {}),
+                MyDrawerTile(
+                  title: "Search",
+                  icon: Icons.search,
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchPage(),
+                        ),
+                      ),
+                ),
 
                 // settings tile
                 MyDrawerTile(
