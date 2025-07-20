@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vintage/features/search/presentation/pages/search_page.dart';
+import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 import 'my_drawer_tile.dart';
@@ -79,7 +80,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 MyDrawerTile(
                   title: "Settings",
                   icon: Icons.settings,
-                  onTap: () {},
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  ),
                 ),
               ],
             ),

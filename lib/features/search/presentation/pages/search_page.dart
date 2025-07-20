@@ -40,6 +40,9 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     // Build UI
     return Scaffold(
+
+      backgroundColor: Theme.of(context).colorScheme.surface,
+
       // AppBar
       appBar: AppBar(
         // search Text Field

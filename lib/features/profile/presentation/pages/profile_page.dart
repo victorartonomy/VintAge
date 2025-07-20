@@ -103,6 +103,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
           // Scaffold
           return Scaffold(
+
+            backgroundColor: Theme.of(context).colorScheme.surface,
+
+            // app bar
             appBar: AppBar(
               title: Text(user.name),
               centerTitle: true,
@@ -122,6 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
               ],
             ),
+
+            // profile view
             body: ListView(
               children: [
                 // Email
@@ -274,7 +280,8 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         // loading
         else if (state is ProfileLoading) {
-          return const Scaffold(
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.surface,
             body: Center(child: CircularProgressIndicator()),
           );
         } else {

@@ -133,6 +133,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
     // Scaffold
     return Scaffold(
 
+      backgroundColor: Theme.of(context).colorScheme.surface,
+
       // App Bar
       appBar: AppBar(
         title: const Text("Upload Post"),
@@ -165,6 +167,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
               color: Theme.of(context).colorScheme.primary,
               child: const Text('Pick Image'),
             ),
+            const SizedBox(height: 25),
 
             // caption text box
             MyTextField(

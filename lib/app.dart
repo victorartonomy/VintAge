@@ -4,7 +4,7 @@ import 'package:vintage/features/authentication/data/firebase_auth_repo.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_states.dart';
 import 'package:vintage/features/search/presentation/cubits/search_cubit.dart';
-import 'package:vintage/themes/light_mode.dart';
+import 'package:vintage/themes/theme_cubit.dart';
 import 'features/authentication/presentation/pages/auth_page.dart';
 import 'features/home/presentation/pages/home_page.dart';
 import 'features/posts/data/firebase_post_repo.dart';
@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
     // provide cubit to app
     return MultiBlocProvider(
       providers: [
+
         // auth cubit
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(authRepo: firebaseAuthRepo)..checkAuth(),
@@ -81,43 +82,52 @@ class MyApp extends StatelessWidget {
         BlocProvider<SearchCubit>(
           create: (context) => SearchCubit(searchRepo: firebaseSearchRepo),
         ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightMode,
-        home: BlocConsumer<AuthCubit, AuthState>(
-          builder: (context, authState) {
-            // unauthenticated
-            if (authState is Unauthenticated) {
-              return const AuthPage();
-            }
 
-            // authenticated
-            if (authState is Authenticated) {
-              return const HomePage();
-            }
-            // loading...
-            else {
-              return Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              );
-            }
-          },
-
-          // show error message
-          listener: (context, state) {
-            if (state is AuthError) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
-            }
-          },
+        // theme cubit
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(),
         ),
-      ),
+
+
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (context, currentTheme) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: currentTheme,
+          home: BlocConsumer<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              // unauthenticated
+              if (authState is Unauthenticated) {
+                return const AuthPage();
+              }
+
+              // authenticated
+              if (authState is Authenticated) {
+                return const HomePage();
+              }
+              // loading...
+              else {
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                );
+              }
+            },
+
+            // show error message
+            listener: (context, state) {
+              if (state is AuthError) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              }
+            },
+          ),
+        ),
+      )
     );
   }
 }
