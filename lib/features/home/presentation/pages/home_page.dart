@@ -30,30 +30,40 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    closeDrawer();
-  }
-
-  void closeDrawer() => setState(() {
+    isDrawerOpen = false;
     xOffset = 0;
     yOffset = 0;
     scaleFactor = 1;
-    isDrawerOpen = false;
-  });
+    item = DrawerItems.blog;
+    isDragging = false;
+  }
 
-  void openDrawer() => setState(() {
-    xOffset = 190;
-    yOffset = 150;
-    scaleFactor = 0.7;
-    isDrawerOpen = true;
-  });
+  void closeDrawer() {
+    if (!isDrawerOpen) return;
+    setState(() {
+      xOffset = 0;
+      yOffset = 0;
+      scaleFactor = 1;
+      isDrawerOpen = false;
+    });
+  }
+
+  void openDrawer() {
+    if (isDrawerOpen) return;
+    setState(() {
+      xOffset = 190;
+      yOffset = 150;
+      scaleFactor = 0.7;
+      isDrawerOpen = true;
+    });
+  }
 
   // Build UI
   @override
   Widget build(BuildContext context) {
-
     final user = context.read<AuthCubit>().currentUser;
-    String uid = user!.uid;
+    if (user == null) return const SizedBox(); // or a loading/error widget
+    String uid = user.uid;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -65,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             onSelectedItemChanged: (item) {
               setState(() => this.item = item);
               closeDrawer();
-            }
+            },
           ),
           WillPopScope(
             onWillPop: () async {
@@ -80,7 +90,7 @@ class _HomePageState extends State<HomePage> {
               onTap: closeDrawer,
               onHorizontalDragStart: (details) => isDragging = true,
               onHorizontalDragUpdate: (details) {
-                if(!isDragging) return;
+                if (!isDragging) return;
 
                 const delta = 1;
                 if (details.delta.dx > delta) {
@@ -94,8 +104,10 @@ class _HomePageState extends State<HomePage> {
               },
 
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
+                duration: const Duration(milliseconds: 350),
+                curve: Curves.easeInOut,
+                transform: Matrix4.translationValues(xOffset, yOffset, 0)
+                  ..scale(scaleFactor),
                 child: AbsorbPointer(
                   absorbing: isDrawerOpen,
                   child: ClipRRect(
@@ -115,20 +127,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget getDrawerPage(uid) {
+  Widget getDrawerPage(String uid) {
     switch (item) {
       case DrawerItems.blog:
         return BlogPage(openDrawer: openDrawer);
       case DrawerItems.services:
-        return ServicesPage(openDrawer: openDrawer,);
+        return ServicesPage(openDrawer: openDrawer);
       case DrawerItems.profile:
         return ProfilePage(uid: uid, openDrawer: openDrawer);
       case DrawerItems.search:
-        return SearchPage(openDrawer: openDrawer,);
+        return SearchPage(openDrawer: openDrawer);
       case DrawerItems.messages:
-        return MessagesPage(openDrawer: openDrawer,);
+        return MessagesPage(openDrawer: openDrawer);
       case DrawerItems.setting:
-        return SettingsPage(openDrawer: openDrawer,);
+        return SettingsPage(openDrawer: openDrawer);
       case DrawerItems.logout:
         return LogOut();
       default:

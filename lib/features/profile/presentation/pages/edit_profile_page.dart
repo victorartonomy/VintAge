@@ -102,10 +102,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget buildEditPage() {
     return ConstrainedScaffold(
-
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: const Text("Edit Profile"),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.primary,
@@ -116,6 +116,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
 
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Profile Picture
           Center(
@@ -130,11 +131,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child:
                   // display selected image for mobile
                   (!kIsWeb && imagePickedFile != null)
-                      ? Image.file(File(imagePickedFile!.path!), fit: BoxFit.cover,)
+                      ? Image.file(
+                        File(imagePickedFile!.path!),
+                        fit: BoxFit.cover,
+                      )
                       :
                       // display selected image for web
                       (kIsWeb && webImage != null)
-                      ? Image.memory(webImage!, fit: BoxFit.cover,)
+                      ? Image.memory(webImage!, fit: BoxFit.cover)
                       :
                       // display image selected -> display existing profile pic
                       CachedNetworkImage(

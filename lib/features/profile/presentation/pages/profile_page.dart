@@ -105,14 +105,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
           // Scaffold
           return Scaffold(
-
             backgroundColor: Theme.of(context).colorScheme.secondary,
 
             // app bar
             appBar: AppBar(
-              backgroundColor: Theme.of(context).colorScheme.tertiary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
 
-              leading: IconButton(onPressed: widget.openDrawer, icon: const Icon(IconoirIcons.drawer)),
+              leading: IconButton(
+                onPressed: widget.openDrawer,
+                icon: const Icon(IconoirIcons.menuScale),
+              ),
 
               title: Text(user.name),
               centerTitle: true,
@@ -287,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
         // loading
         else if (state is ProfileLoading) {
           return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             body: Center(child: CircularProgressIndicator()),
           );
         } else {

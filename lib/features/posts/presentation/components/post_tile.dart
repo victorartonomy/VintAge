@@ -173,8 +173,15 @@ class _PostTileState extends State<PostTile> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Delete Post?"),
-            content: const Text("Are you sure you want to delete this post?"),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            title: Text(
+              "Delete Post?",
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            ),
+            content: Text(
+              "Are you sure you want to delete this post?",
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            ),
             actions: [
               // cancel
               TextButton(
@@ -207,7 +214,11 @@ class _PostTileState extends State<PostTile> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(uid: widget.post.userId, openDrawer: () => Navigator.pop(context)),
+                    builder:
+                        (context) => ProfilePage(
+                          uid: widget.post.userId,
+                          openDrawer: () => Navigator.pop(context),
+                        ),
                   ),
                 ),
             child: Padding(
@@ -439,4 +450,3 @@ String formatDateTimeManually(DateTime dateTime) {
 
   return '$day/$month/$year';
 }
-
