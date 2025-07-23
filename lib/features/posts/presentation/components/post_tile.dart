@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
-import 'package:vintage/features/home/presentation/pages/home_page.dart';
 import 'package:vintage/features/posts/domain/entities/comment.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
