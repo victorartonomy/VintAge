@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/profile/presentation/components/user_tile.dart';
 import 'package:vintage/features/search/presentation/cubits/search_states.dart';
 import 'package:vintage/responsive/constrained_scaffold.dart';
@@ -54,6 +55,12 @@ class _SearchPageState extends State<SearchPage> {
           decoration: InputDecoration(
             hintText: "Search",
             hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+            prefixIcon: Icon(IconoirIcons.search, color: Theme.of(context).colorScheme.primary),
+            suffixIcon: IconButton(
+              onPressed: () => searchController.clear(),
+              icon: Icon(IconoirIcons.xmark, color: Theme.of(context).colorScheme.primary),
+            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
         centerTitle: true,

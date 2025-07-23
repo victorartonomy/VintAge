@@ -13,9 +13,19 @@ class DrawerItems {
     icon: IconoirIcons.peopleTag,
   );
 
+  static const services = DrawerItem(
+    title: "Services",
+    icon: IconoirIcons.suitcase,
+  );
+
   static const search = DrawerItem(
     title: "Search",
     icon: IconoirIcons.search,
+  );
+
+  static const messages = DrawerItem(
+    title: "Messages",
+    icon: IconoirIcons.message,
   );
 
   static const setting = DrawerItem(
@@ -28,5 +38,5 @@ class DrawerItems {
     icon: IconoirIcons.logOut,
   );
 
-  static final List<DrawerItem> all = [blog, profile, search, setting, logout];
+  static final List<DrawerItem> all = [blog, services, search, messages, setting, logout];
 }

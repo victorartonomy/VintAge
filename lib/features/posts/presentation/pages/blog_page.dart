@@ -42,13 +42,15 @@ class _BlogPageState extends State<BlogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
+
+      // App Bar
       appBar: AppBar(
         foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Colors.transparent,
         title: const Text("Blog"),
         leading: IconButton(
           onPressed: widget.openDrawer,
-          icon: const Icon(Icons.menu),
+          icon: const Icon(IconoirIcons.menuScale),
         ),
         centerTitle: true,
         actions: [
@@ -64,6 +66,8 @@ class _BlogPageState extends State<BlogPage> {
           ),
         ],
       ),
+
+      // Body
       body: BlocBuilder<PostCubit, PostStates>(
         builder: (context, state) {
           // loading

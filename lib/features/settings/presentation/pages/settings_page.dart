@@ -37,6 +37,7 @@ class SettingsPage extends StatelessWidget {
         leading: IconButton(onPressed: openDrawer, icon: const Icon(Icons.menu)),
         title: const Text("Settings"),
         foregroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
       ),
 
       body: Column(

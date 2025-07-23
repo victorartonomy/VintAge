@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconoir_flutter/iconoir_flutter.dart';
 import 'package:vintage/features/home/presentation/components/drawer_item.dart';
 import 'package:vintage/features/home/presentation/components/hidden_drawer.dart';
+import 'package:vintage/features/messages/presentation/pages/messages_page.dart';
 import 'package:vintage/features/posts/presentation/pages/blog_page.dart';
 import 'package:vintage/features/profile/presentation/pages/profile_page.dart';
 import 'package:vintage/features/search/presentation/pages/search_page.dart';
+import 'package:vintage/features/services/presentation/pages/services_page.dart';
 import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../components/drawer_items.dart';
@@ -117,10 +119,14 @@ class _HomePageState extends State<HomePage> {
     switch (item) {
       case DrawerItems.blog:
         return BlogPage(openDrawer: openDrawer);
+      case DrawerItems.services:
+        return ServicesPage(openDrawer: openDrawer,);
       case DrawerItems.profile:
         return ProfilePage(uid: uid, openDrawer: openDrawer);
       case DrawerItems.search:
         return SearchPage(openDrawer: openDrawer,);
+      case DrawerItems.messages:
+        return MessagesPage(openDrawer: openDrawer,);
       case DrawerItems.setting:
         return SettingsPage(openDrawer: openDrawer,);
       case DrawerItems.logout:
