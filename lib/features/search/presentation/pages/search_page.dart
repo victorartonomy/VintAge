@@ -7,7 +7,8 @@ import 'package:vintage/responsive/constrained_scaffold.dart';
 import '../cubits/search_cubit.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final VoidCallback openDrawer;
+  const SearchPage({super.key, required this.openDrawer});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -42,10 +43,11 @@ class _SearchPageState extends State<SearchPage> {
     // Build UI
     return ConstrainedScaffold(
 
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
 
       // AppBar
       appBar: AppBar(
+        leading: IconButton(onPressed: widget.openDrawer, icon: const Icon(Icons.menu)),
         // search Text Field
         title: TextField(
           controller: searchController,
@@ -55,6 +57,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.primary,
       ),
 

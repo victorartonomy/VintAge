@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vintage/features/posts/presentation/components/post_tile.dart';
-import '../../../../responsive/constrained_scaffold.dart';
-import '../../../posts/presentation/cubits/post_cubits.dart';
-import '../../../posts/presentation/cubits/post_states.dart';
-import '../../../posts/presentation/pages/upload_post_page.dart';
-import '../components/my_drawer.dart';
+import 'package:iconoir_flutter/iconoir_flutter.dart';
+import 'package:vintage/features/home/presentation/components/drawer_item.dart';
+import 'package:vintage/features/home/presentation/components/hidden_drawer.dart';
+import 'package:vintage/features/posts/presentation/pages/blog_page.dart';
+import 'package:vintage/features/profile/presentation/pages/profile_page.dart';
+import 'package:vintage/features/search/presentation/pages/search_page.dart';
+import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
+import '../../../authentication/presentation/cubits/auth_cubit.dart';
+import '../components/drawer_items.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,92 +18,115 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // post cubit
-  late final postCubit = context.read<PostCubit>();
+  late double xOffset;
+  late double yOffset;
+  late double scaleFactor;
+  late bool isDrawerOpen;
+  DrawerItem item = DrawerItems.blog;
+  bool isDragging = false;
 
-  // on startup (initial state)
   @override
   void initState() {
     super.initState();
 
-    // fetch all posts
-    fetchAllPosts();
+    closeDrawer();
   }
 
-  void fetchAllPosts() {
-    postCubit.fetchAllPosts();
-  }
+  void closeDrawer() => setState(() {
+    xOffset = 0;
+    yOffset = 0;
+    scaleFactor = 1;
+    isDrawerOpen = false;
+  });
 
-  void deletePost(String postId) {
-    postCubit.deletePost(postId);
-    fetchAllPosts();
-  }
+  void openDrawer() => setState(() {
+    xOffset = 190;
+    yOffset = 150;
+    scaleFactor = 0.7;
+    isDrawerOpen = true;
+  });
 
   // Build UI
   @override
   Widget build(BuildContext context) {
-    return ConstrainedScaffold(
 
+    final user = context.read<AuthCubit>().currentUser;
+    String uid = user!.uid;
+
+    return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
 
-      // AppBar
-      appBar: AppBar(
-        // title
-        centerTitle: true,
-        title: const Text("Home"),
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          IconButton(
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UploadPostPage(),
+      // BODY
+      body: Stack(
+        children: [
+          HiddenDrawer(
+            onSelectedItemChanged: (item) {
+              setState(() => this.item = item);
+              closeDrawer();
+            }
+          ),
+          WillPopScope(
+            onWillPop: () async {
+              if (isDrawerOpen) {
+                closeDrawer();
+                return false;
+              } else {
+                return true;
+              }
+            },
+            child: GestureDetector(
+              onTap: closeDrawer,
+              onHorizontalDragStart: (details) => isDragging = true,
+              onHorizontalDragUpdate: (details) {
+                if(!isDragging) return;
+
+                const delta = 1;
+                if (details.delta.dx > delta) {
+                  openDrawer();
+                } else if (details.delta.dx < -delta) {
+                  closeDrawer();
+                }
+              },
+              onHorizontalDragEnd: (details) {
+                isDragging = false;
+              },
+
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
+                child: AbsorbPointer(
+                  absorbing: isDrawerOpen,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(isDrawerOpen ? 20 : 0),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.surface,
+                      //color: isDrawerOpen? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.surface,
+                      child: getDrawerPage(uid),
+                    ),
                   ),
                 ),
-            icon: const Icon(Icons.add),
+              ),
+            ),
           ),
         ],
       ),
-
-      // Drawer
-      drawer: MyDrawer(),
-
-      // BODY
-      body: BlocBuilder<PostCubit, PostStates>(
-        builder: (context, state) {
-          // loading
-          if (state is PostsLoading && state is PostsUploading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          // loaded
-          else if (state is PostsLoaded) {
-            final allPosts = state.posts;
-
-            if (allPosts.isEmpty) {
-              return const Center(child: Text("No posts available"));
-            }
-
-            return ListView.builder(
-              itemCount: allPosts.length,
-              itemBuilder: (context, index) {
-                // get individual post
-                final post = allPosts[index];
-
-                // image
-                return PostTile(post: post, onDeletePressed: () => deletePost(post.id));
-              },
-            );
-          }
-
-          // error
-          else if (state is PostsError) {
-            return Center(child: Text(state.message));
-          } else {
-            return const SizedBox();
-          }
-        },
-      ),
     );
+  }
+
+  Widget getDrawerPage(uid) {
+    switch (item) {
+      case DrawerItems.blog:
+        return BlogPage(openDrawer: openDrawer);
+      case DrawerItems.profile:
+        return ProfilePage(uid: uid, openDrawer: openDrawer);
+      case DrawerItems.search:
+        return SearchPage(openDrawer: openDrawer,);
+      case DrawerItems.setting:
+        return SettingsPage(openDrawer: openDrawer,);
+      case DrawerItems.logout:
+        return LogOut();
+      default:
+        return BlogPage(openDrawer: openDrawer);
+    }
   }
 }

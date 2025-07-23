@@ -13,7 +13,13 @@ class ConstrainedScaffold extends StatelessWidget {
   final Widget? drawer;
   final Color backgroundColor;
 
-  const ConstrainedScaffold({super.key, required this.body, this.appBar, this.drawer, required this.backgroundColor});
+  const ConstrainedScaffold({
+    super.key,
+    required this.body,
+    this.appBar,
+    this.drawer,
+    required this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,9 @@ class ConstrainedScaffold extends StatelessWidget {
       backgroundColor: backgroundColor,
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 430), // apply global constraints here
+          constraints: const BoxConstraints(
+            maxWidth: 530,
+          ), // apply global constraints here
           child: body,
         ),
       ),

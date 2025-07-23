@@ -58,10 +58,10 @@ class MyApp extends StatelessWidget {
     // provide cubit to app
     return MultiBlocProvider(
       providers: [
-
         // auth cubit
         BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(authRepo: firebaseAuthRepo)..checkAuth(),
+          create:
+              (context) => AuthCubit(authRepo: firebaseAuthRepo)..checkAuth(),
         ),
 
         // profile cubit
@@ -75,7 +75,11 @@ class MyApp extends StatelessWidget {
 
         // post cubit
         BlocProvider<PostCubit>(
-          create: (context) => PostCubit(postRepo: firebasePostsRepo, storageRepo: firebaseStorageRepo),
+          create:
+              (context) => PostCubit(
+                postRepo: firebasePostsRepo,
+                storageRepo: firebaseStorageRepo,
+              ),
         ),
 
         // search cubit
@@ -84,50 +88,51 @@ class MyApp extends StatelessWidget {
         ),
 
         // theme cubit
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(),
-        ),
-
-
+        BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeData>(
-        builder: (context, currentTheme) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: currentTheme,
-          home: BlocConsumer<AuthCubit, AuthState>(
-            builder: (context, authState) {
-              // unauthenticated
-              if (authState is Unauthenticated) {
-                return const AuthPage();
-              }
+        builder:
+            (context, currentTheme) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: currentTheme,
+              home: BlocConsumer<AuthCubit, AuthState>(
+                builder: (context, authState) {
+                  
+                  // unauthenticated
+                  if (authState is Unauthenticated) {
+                    return const AuthPage();
+                  }
 
-              // authenticated
-              if (authState is Authenticated) {
-                return const HomePage();
-              }
-              // loading...
-              else {
-                return Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                );
-              }
-            },
+                  // authenticated
+                  if (authState is Authenticated) {
+                    return const HomePage();
+                  }
 
-            // show error message
-            listener: (context, state) {
-              if (state is AuthError) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
-              }
-            },
-          ),
-        ),
-      )
+                  // loading...
+                  else {
+                    return Scaffold(
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      body: Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    );
+                  }
+                },
+
+                // show error message
+                listener: (context, state) {
+                  if (state is AuthError) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                  }
+                },
+
+              ),
+            ),
+      ),
     );
   }
 }

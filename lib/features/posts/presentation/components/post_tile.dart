@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
+import 'package:vintage/features/home/presentation/pages/home_page.dart';
 import 'package:vintage/features/posts/domain/entities/comment.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
@@ -205,7 +208,7 @@ class _PostTileState extends State<PostTile> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(uid: widget.post.userId),
+                    builder: (context) => ProfilePage(uid: widget.post.userId, openDrawer: () => Navigator.pop(context)),
                   ),
                 ),
             child: Padding(
@@ -279,14 +282,15 @@ class _PostTileState extends State<PostTile> {
                   onTap: toggleLike,
                   child: Icon(
                     widget.post.likes.contains(currentUser!.uid)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
+                        ? CupertinoIcons.suit_heart_fill
+                        : IconoirIcons.heart,
                     color:
                         widget.post.likes.contains(currentUser!.uid)
                             ? Colors.red
                             : Theme.of(context).colorScheme.primary,
                   ),
                 ),
+                const SizedBox(width: 10),
                 // count
                 Text(
                   widget.post.likes.length.toString(),
@@ -300,7 +304,7 @@ class _PostTileState extends State<PostTile> {
                 IconButton(
                   onPressed: openCommentBox,
                   icon: Icon(
-                    Icons.comment,
+                    IconoirIcons.message,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
