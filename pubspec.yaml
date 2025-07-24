@@ -47,6 +47,7 @@ dependencies:
   iconoir_flutter: ^7.11.0
   flutter_iconoir_ttf: ^0.1.1
   hidden_drawer_menu: ^3.0.1
+  smooth_page_indicator: ^1.2.1
 
 dev_dependencies:
   flutter_test:
