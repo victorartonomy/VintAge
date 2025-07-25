@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconoir_flutter/iconoir_flutter.dart';
 import 'package:vintage/features/home/presentation/components/drawer_item.dart';
 import 'package:vintage/features/home/presentation/components/hidden_drawer.dart';
 import 'package:vintage/features/messages/presentation/pages/messages_page.dart';
@@ -76,6 +75,7 @@ class _HomePageState extends State<HomePage> {
               setState(() => this.item = item);
               closeDrawer();
             },
+            selectedItem: item,
           ),
           WillPopScope(
             onWillPop: () async {
@@ -104,6 +104,17 @@ class _HomePageState extends State<HomePage> {
               },
 
               child: AnimatedContainer(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(isDrawerOpen ? 20 : 0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primary,
+                      offset: Offset(0, 0),
+                      blurRadius: 20,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
                 duration: const Duration(milliseconds: 350),
                 curve: Curves.easeInOut,
                 transform: Matrix4.translationValues(xOffset, yOffset, 0)
@@ -142,9 +153,25 @@ class _HomePageState extends State<HomePage> {
       case DrawerItems.setting:
         return SettingsPage(openDrawer: openDrawer);
       case DrawerItems.logout:
-        return LogOut();
+        return logout();
       default:
         return BlogPage(openDrawer: openDrawer);
     }
+  }
+
+  Widget logout() {
+    return AlertDialog(
+      title: const Text('Logout'),
+      content: Text('Are you sure you want to logout?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            context.read<AuthCubit>().logout();
+          },
+          child: Text('Logout'),
+        ),
+        TextButton(onPressed: () {}, child: Text('Cancel')),
+      ],
+    );
   }
 }

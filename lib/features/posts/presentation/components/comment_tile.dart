@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/posts/domain/entities/comment.dart';
-import 'package:vintage/features/posts/presentation/cubits/post_cubits.dart';
 
+import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
+import '../cubits/post_cubits.dart';
 
 class CommentTile extends StatefulWidget {
   final Comment comment;
@@ -32,11 +32,23 @@ class _CommentTileState extends State<CommentTile> {
     isOwnPost = (widget.comment.userId == currentUser!.uid);
   }
 
+  // get First name
+  String getFirstName(String fullName) {
+    if (fullName.isEmpty) return '';
+
+    // Split the name by whitespace
+    List<String> parts = fullName.trim().split(' ');
+
+    // Return the first part as first name
+    return parts[0];
+  }
+
   void showOptions() {
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
             title: const Text("Delete Comment?"),
             content: const Text("Are you sure you want to delete this post?"),
             actions: [
@@ -64,30 +76,67 @@ class _CommentTileState extends State<CommentTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        children: [
-          // name
-          Text(
-            widget.comment.userName,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white12,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
 
-          // comment text
-          Text(widget.comment.text),
-          const Spacer(),
+            // profile pic
+            // Container(
+            //   height: 30,
+            //   width: 30,
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     image: DecorationImage(
+            //       image: AssetImage("assets/images/img1.jpg"),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
 
-          // delete button
-          if (isOwnPost)
-            IconButton(
-              onPressed: showOptions,
-              icon: Icon(
-                Icons.delete,
-                color: Theme.of(context).colorScheme.primary,
+            // author name
+            SizedBox(width: 10),
+            Text(
+              '${getFirstName(widget.comment.userName)} :',
+              style: TextStyle(
+                color: Colors.white70,
+                fontWeight: FontWeight.bold,
               ),
             ),
-        ],
+
+            // comment text
+            SizedBox(width: 10),
+            Flexible(
+              child: Expanded(
+                child: Text(
+                  widget.comment.text,
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ),
+            ),
+
+            // delete
+            if (isOwnPost)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: showOptions,
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }

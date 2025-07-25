@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
-import 'package:vintage/features/posts/presentation/pages/upload_post_page.dart';
+import 'package:vintage/features/posts/presentation/pages/old_upload_post_page.dart';
 
 import '../components/post_tile.dart';
 import '../cubits/post_cubits.dart';
@@ -59,7 +59,7 @@ class _OldBlogPageState extends State<OldBlogPage> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const UploadPostPage(),
+                    builder: (context) => const OldUploadPostPage(),
                   ),
                 ),
             icon: Icon(IconoirIcons.upload),

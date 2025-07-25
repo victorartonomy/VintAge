@@ -7,7 +7,7 @@ import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/posts/domain/entities/comment.dart';
 import 'package:vintage/features/posts/domain/entities/post.dart';
-import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
+import 'package:vintage/features/posts/presentation/components/old_comment_tile.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_cubits.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
 import 'package:vintage/features/profile/domain/entities/profile_user.dart';
@@ -374,7 +374,7 @@ class _PostTileState extends State<PostTile> {
                       final comment = post.comments[index];
 
                       // comment tile ui
-                      return CommentTile(comment: comment);
+                      return OldCommentTile(comment: comment);
                     },
                   );
                 }

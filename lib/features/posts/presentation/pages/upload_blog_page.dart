@@ -1,26 +1,27 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vintage/features/authentication/domain/entities/app_user.dart';
-import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
-import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
-import 'package:vintage/features/posts/domain/entities/post.dart';
-import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
-import 'package:vintage/responsive/constrained_scaffold.dart';
 
+import '../../../authentication/domain/entities/app_user.dart';
+import '../../../authentication/presentation/components/my_text_field.dart';
+import '../../../authentication/presentation/cubits/auth_cubit.dart';
+import '../../domain/entities/post.dart';
 import '../cubits/post_cubits.dart';
+import '../cubits/post_states.dart';
 
-class UploadPostPage extends StatefulWidget {
-  const UploadPostPage({super.key});
+class UploadBlogPage extends StatefulWidget {
+  const UploadBlogPage({super.key});
 
   @override
-  State<UploadPostPage> createState() => _UploadPostPageState();
+  State<UploadBlogPage> createState() => _UploadBlogPageState();
 }
 
-class _UploadPostPageState extends State<UploadPostPage> {
+class _UploadBlogPageState extends State<UploadBlogPage> {
+
   // mobile image picker
   PlatformFile? imagePickedFile;
 
@@ -28,6 +29,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
   Uint8List? webImage;
 
   // text controller
+  final titleController = TextEditingController();
+  final subtitleController = TextEditingController();
   final captionController = TextEditingController();
 
   // current user
@@ -78,6 +81,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       userId: _currentUser!.uid,
       userName: _currentUser!.name,
+      title: titleController.text,
+      subtitle: subtitleController.text,
       text: captionController.text,
       imageUrl: '',
       timestamp: DateTime.now(),
@@ -104,10 +109,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
     super.dispose();
   }
 
-  // BUILD UI
   @override
   Widget build(BuildContext context) {
-    // BLOC Consumer -> builder + Listener
     return BlocConsumer<PostCubit, PostStates>(
       builder: (context, state) {
         // loading or uploading
@@ -131,14 +134,14 @@ class _UploadPostPageState extends State<UploadPostPage> {
   }
 
   Widget buildUploadPage() {
-    // Scaffold
-    return ConstrainedScaffold(
+    return Scaffold(
 
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
 
-      // App Bar
+      // app bar
       appBar: AppBar(
-        title: const Text("Upload Post"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: const Text("Upload Blog"),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.primary,
         actions: [
@@ -147,36 +150,56 @@ class _UploadPostPageState extends State<UploadPostPage> {
         ],
       ),
 
-      // body
-      body: Center(
-        child: Column(
-          children: [
-            // image preview for web
-            if (kIsWeb && webImage != null) Image.memory(webImage!),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // upload image
+              // image preview for web
+              if (kIsWeb && webImage != null) Image.memory(webImage!),
 
-            // image preview for mobile
-            if (!kIsWeb && imagePickedFile != null)
-              SizedBox(
-                height: 430,
-                width: double.infinity,
-                child: Image.file(File(imagePickedFile!.path!)),
+              // image preview for mobile
+              if (!kIsWeb && imagePickedFile != null)
+                SizedBox(
+                  height: 430,
+                  width: double.infinity,
+                  child: Image.file(File(imagePickedFile!.path!)),
+                ),
+
+              // button to pick image
+              MaterialButton(
+                onPressed: pickImage,
+                color: Theme.of(context).colorScheme.primary,
+                child: const Text('Pick Image'),
               ),
+              const SizedBox(height: 25),
 
-            // button to pick image
-            MaterialButton(
-              onPressed: pickImage,
-              color: Theme.of(context).colorScheme.primary,
-              child: const Text('Pick Image'),
-            ),
-            const SizedBox(height: 25),
+              // title
+              MyTextField(
+                controller: titleController,
+                hintText: "Enter title",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
 
-            // caption text box
-            MyTextField(
-              controller: captionController,
-              hintText: "Enter Caption",
-              obscureText: false,
-            ),
-          ],
+              // title
+              MyTextField(
+                controller: subtitleController,
+                hintText: "Enter Subtitle",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+
+              // body
+              MyTextField(
+                controller: captionController,
+                hintText: "Enter description",
+                obscureText: false,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:vintage/features/posts/presentation/cubits/blog_tile.dart';
-import 'package:vintage/features/posts/presentation/pages/upload_post_page.dart';
+import 'package:vintage/features/posts/presentation/components/blog_tile.dart';
+import 'package:vintage/features/posts/presentation/pages/upload_blog_page.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -31,16 +31,14 @@ class _BlogPageState extends State<BlogPage> {
 
     // fetch all posts
     fetchAllPosts();
-    getCurrentUser();
+
+    // get current user
+    final authCubit = context.read<AuthCubit>();
+    currentUser = authCubit.currentUser;
   }
 
   void fetchAllPosts() {
     postCubit.fetchAllPosts();
-  }
-
-  void getCurrentUser() {
-    final authCubit = context.read<AuthCubit>();
-    currentUser = authCubit.currentUser;
   }
 
   @override
@@ -64,7 +62,7 @@ class _BlogPageState extends State<BlogPage> {
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const UploadPostPage(),
+                builder: (context) => const UploadBlogPage(),
               ),
             ),
             icon: Icon(IconoirIcons.upload),
@@ -89,189 +87,195 @@ class _BlogPageState extends State<BlogPage> {
               return const Center(child: Text("No posts available"));
             }
 
-            return SingleChildScrollView(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                children: <Widget>[
+            return RefreshIndicator(
+              onRefresh: () {
+                fetchAllPosts();
+                return Future.value();
+                },
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  children: <Widget>[
 
-                  // Recent Blogs
-                  Row(
-                    children: [
-                      Text(
-                        "Recent Blogs",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    // Recent Blogs
+                    Row(
+                      children: [
+                        Text(
+                          "Recent Blogs",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        const SizedBox(width: 10),
+                        Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Most recent Blogs
+                    SizedBox(
+                      height: 200,
+                      child: PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 4,
+                        controller: blogController,
+                        itemBuilder: (context, index) {
+                          // get final blog
+                          final post = allPosts.take(4).toList();
+
+                          // blog
+                          return BlogTile(post: post[index]);
+                        },
                       ),
-                      const SizedBox(width: 10),
-                      Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // Most recent Blogs
-                  SizedBox(
-                    height: 200,
-                    child: PageView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
+                    ),
+                    const SizedBox(height: 12),
+                    // page indicator
+                    SmoothPageIndicator(
                       controller: blogController,
-                      itemBuilder: (context, index) {
-                        // get final blog
-                        final post = allPosts.take(4).toList();
-
-                        // blog
-                        return BlogTile(post: post[index]);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // page indicator
-                  SmoothPageIndicator(
-                    controller: blogController,
-                    count: 4,
-                    effect: ExpandingDotsEffect(
-                      activeDotColor: Color.fromARGB(255, 255, 90, 90),
-                      dotColor: Theme.of(context).colorScheme.primary,
-                      dotHeight: 10,
-                      dotWidth: 10,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // You may/will like these
-                  Row(
-                    children: [
-                      Text(
-                        "You may like these",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      count: 4,
+                      effect: ExpandingDotsEffect(
+                        activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                        dotColor: Theme.of(context).colorScheme.primary,
+                        dotHeight: 10,
+                        dotWidth: 10,
                       ),
-                      Spacer(),
-                      // Text(
-                      //   "View All",
-                      //   style: TextStyle(
-                      //     color: Colors.white70,
-                      //     fontSize: 15,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // You may/will like these
+                    Row(
+                      children: [
+                        Text(
+                          "You may like these",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        // Text(
+                        //   "View All",
+                        //   style: TextStyle(
+                        //     color: Colors.white70,
+                        //     fontSize: 15,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 10),
+                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Blogs
+                    SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allPosts.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return BlogTile(post: allPosts[index]);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // favourite Blogs
+                    Row(
+                      children: [
+                        Text(
+                          "Your Favourite's",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        // Text(
+                        //   "View All",
+                        //   style: TextStyle(
+                        //     color: Colors.white70,
+                        //     fontSize: 15,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 10),
+                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Blogs
+                    SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: likedPosts.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return BlogTile(post: likedPosts[index]);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // all Blogs
+                    Row(
+                      children: [
+                        Text(
+                          "All Blogs",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        // Text(
+                        //   "View All",
+                        //   style: TextStyle(
+                        //     color: Colors.white70,
+                        //     fontSize: 15,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 10),
+                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    ListView.builder(
+                      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      //   crossAxisCount: 2, // Number of columns
+                      //   crossAxisSpacing: 10.0,
+                      //   mainAxisSpacing: 10.0,
+                      //   childAspectRatio: 1.0, // Width/height ratio
                       // ),
-                      // const SizedBox(width: 10),
-                      // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // Blogs
-                  SizedBox(
-                    height: 200,
-                    child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: allPosts.length,
-                      scrollDirection: Axis.horizontal,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return BlogTile(post: allPosts[index]);
                       },
                     ),
-                  ),
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 20),
 
-                  // favourite Blogs
-                  Row(
-                    children: [
-                      Text(
-                        "Your Favourite's",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      // Text(
-                      //   "View All",
-                      //   style: TextStyle(
-                      //     color: Colors.white70,
-                      //     fontSize: 15,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      // const SizedBox(width: 10),
-                      // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // Blogs
-                  SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: likedPosts.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return BlogTile(post: likedPosts[index]);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // all Blogs
-                  Row(
-                    children: [
-                      Text(
-                        "All Blogs",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      // Text(
-                      //   "View All",
-                      //   style: TextStyle(
-                      //     color: Colors.white70,
-                      //     fontSize: 15,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      // const SizedBox(width: 10),
-                      // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Number of columns
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      childAspectRatio: 1.0, // Width/height ratio
-                    ),
-                    shrinkWrap: true,
-                    itemCount: allPosts.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return BlogTile(post: allPosts[index]);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  
-                  // The End
-                  Text("The End!", style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.primary),),
-                  const SizedBox(height: 20),
-                ],
+                    // The End
+                    Text("The End!", style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.primary),),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             );
           }
