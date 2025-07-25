@@ -11,6 +11,7 @@ Settings Page:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/responsive/constrained_scaffold.dart';
 import 'package:vintage/themes/theme_cubit.dart';
 
@@ -34,7 +35,7 @@ class SettingsPage extends StatelessWidget {
 
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: IconButton(onPressed: openDrawer, icon: const Icon(Icons.menu)),
+        leading: IconButton(onPressed: openDrawer, icon: const Icon(IconoirIcons.menuScale)),
         title: const Text("Settings"),
         foregroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,

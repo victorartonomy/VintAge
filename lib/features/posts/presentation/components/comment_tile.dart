@@ -80,13 +80,12 @@ class _CommentTileState extends State<CommentTile> {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white12,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             // profile pic
             // Container(
             //   height: 30,
@@ -105,7 +104,7 @@ class _CommentTileState extends State<CommentTile> {
             Text(
               '${getFirstName(widget.comment.userName)} :',
               style: TextStyle(
-                color: Colors.white70,
+                color: Theme.of(context).colorScheme.secondary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -116,7 +115,9 @@ class _CommentTileState extends State<CommentTile> {
               child: Expanded(
                 child: Text(
                   widget.comment.text,
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
               ),
             ),
@@ -130,7 +131,7 @@ class _CommentTileState extends State<CommentTile> {
                     onPressed: showOptions,
                     icon: Icon(
                       Icons.delete,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ],
