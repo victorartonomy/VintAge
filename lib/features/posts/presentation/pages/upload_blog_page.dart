@@ -193,11 +193,38 @@ class _UploadBlogPageState extends State<UploadBlogPage> {
               const SizedBox(height: 25),
 
               // body
-              MyTextField(
+              // MyTextField(
+              //   controller: captionController,
+              //   hintText: "Enter description",
+              //   obscureText: false,
+              // ),
+
+              TextField(
                 controller: captionController,
-                hintText: "Enter description",
-                obscureText: false,
-              ),
+                maxLines: null,
+                decoration: InputDecoration(
+
+                  fillColor: Theme.of(context).colorScheme.secondary,
+                  filled: true,
+
+                  // unselected border
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  // selected border
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  // hint text
+                  hintText: "Enter Description",
+                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              )
+
             ],
           ),
         ),

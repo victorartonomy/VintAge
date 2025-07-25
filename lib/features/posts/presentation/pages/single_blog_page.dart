@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
 
@@ -82,6 +84,34 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
     super.dispose();
   }
 
+  void toggleLike() {
+    // current like status
+    final isLiked = widget.post.likes.contains(currentUser!.uid);
+
+    // optimistically like and update UI
+    setState(() {
+      if (isLiked) {
+        widget.post.likes.remove(currentUser!.uid); // unlike
+      } else {
+        widget.post.likes.add(currentUser!.uid); // like
+      }
+    });
+
+    // update like
+    postCubit.toggleLikePost(widget.post.id, currentUser!.uid).catchError((
+        error,
+        ) {
+      // if error, undo like
+      setState(() {
+        if (isLiked) {
+          widget.post.likes.add(currentUser!.uid); // revert unlike
+        } else {
+          widget.post.likes.remove(currentUser!.uid); // revert like
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +171,20 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // TODO: check if post is liked by the user?
-                  Icon(Icons.favorite, color: Colors.red),
+                  GestureDetector(
+                    onTap: toggleLike,
+                    child: Icon(
+                      widget.post.likes.contains(currentUser!.uid)
+                          ? CupertinoIcons.suit_heart_fill
+                          : IconoirIcons.heart,
+                      color:
+                      widget.post.likes.contains(currentUser!.uid)
+                          ? Colors.red
+                          : Theme.of(
+                        context,
+                      ).colorScheme.inversePrimary,
+                    ),
+                  ),
                   SizedBox(width: 10),
                   Text(
                     widget.post.likes.length.toString(),
