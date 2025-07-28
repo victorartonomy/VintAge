@@ -112,6 +112,8 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
     });
   }
 
+
+  // BUILD UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +127,7 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
         centerTitle: true,
         title: Text("Blog Details"),
         elevation: 0,
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white70,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
         surfaceTintColor: Colors.transparent,
       ),

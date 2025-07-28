@@ -26,6 +26,7 @@ class Post {
     required this.comments,
   });
 
+  // create modified copies of post
   Post copyWith({String? imageUrl}) {
     return Post(
       id: id,
