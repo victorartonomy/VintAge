@@ -5,6 +5,7 @@ class Service {
   final String title;
   final List<String> imagesUrl;
   final String description;
+  final List<String> lstServices;
   final String contactNumber;
   final String contactEmail;
   final String timing;
@@ -21,6 +22,7 @@ class Service {
     required this.title,
     required this.imagesUrl,
     required this.description,
+    required this.lstServices,
     required this.contactNumber,
     required this.contactEmail,
     required this.timing,
@@ -40,6 +42,7 @@ class Service {
       title: title,
       imagesUrl: imagesUrl ?? this.imagesUrl,
       description: description,
+      lstServices: lstServices,
       contactNumber: contactNumber,
       contactEmail: contactEmail,
       timing: timing,
@@ -60,6 +63,7 @@ class Service {
       "title": title,
       "imagesUrl": imagesUrl,
       "description": description,
+      "lstServices": lstServices,
       "contactNumber": contactNumber,
       "contactEmail": contactEmail,
       "timing": timing,
@@ -80,6 +84,7 @@ class Service {
       title: json["title"],
       imagesUrl: List<String>.from(json['imagesUrl'] ?? []),
       description: json["description"],
+      lstServices: List<String>.from(json['lstServices'] ?? []),
       contactNumber: json["contactNumber"],
       contactEmail: json["contactEmail"],
       timing: json["timing"],

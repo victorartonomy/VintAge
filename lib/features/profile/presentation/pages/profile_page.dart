@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
-import 'package:vintage/features/posts/presentation/components/post_tile.dart';
+import 'package:vintage/features/posts/presentation/components/blog_tile.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_cubits.dart';
 import 'package:vintage/features/posts/presentation/cubits/post_states.dart';
 import 'package:vintage/features/profile/presentation/components/bio_box.dart';
@@ -109,6 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
             // app bar
             appBar: AppBar(
+
+              automaticallyImplyLeading: true,
+
               backgroundColor: Theme.of(context).colorScheme.secondary,
 
               leading: IconButton(
@@ -266,13 +269,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           final post = userPosts[index];
 
                           // return as post tile ui
-                          return PostTile(
-                            post: post,
-                            onDeletePressed:
-                                () => context.read<PostCubit>().deletePost(
-                                  post.id,
-                                ),
-                          );
+
+                          return BlogTile(post: post);
+
+                          // return PostTile(
+                          //   post: post,
+                          //   onDeletePressed:
+                          //       () => context.read<PostCubit>().deletePost(
+                          //         post.id,
+                          //       ),
+                          // );
                         },
                       );
                     } else if (state is PostsLoading) {

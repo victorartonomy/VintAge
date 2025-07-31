@@ -3,16 +3,25 @@ import 'package:flutter/material.dart';
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final int? maxLines;
   final bool obscureText;
-  const MyTextField({super.key, required this.controller, required this.hintText, required this.obscureText});
+  const MyTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.maxLines,
+    required this.obscureText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      decoration: InputDecoration(
 
+      maxLines: maxLines,
+
+      decoration: InputDecoration(
         fillColor: Theme.of(context).colorScheme.secondary,
         filled: true,
 

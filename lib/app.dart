@@ -13,6 +13,8 @@ import 'features/profile/data/firebase_profile_repo.dart';
 import 'features/profile/presentation/cubits/profile_cubit.dart';
 import 'features/search/data/firebase_search_repo.dart';
 import 'features/storage/data/firebase_storage_repo.dart';
+import 'features/services/data/firebase_service_repo.dart';
+import 'features/services/presentation/cubits/service_cubit.dart';
 
 /*
 
@@ -51,6 +53,9 @@ class MyApp extends StatelessWidget {
   // search repos
   final firebaseSearchRepo = FirebaseSearchRepo();
 
+  // services repos
+  final firebaseServiceRepo = FirebaseServiceRepo();
+
   MyApp({super.key});
 
   @override
@@ -87,6 +92,15 @@ class MyApp extends StatelessWidget {
           create: (context) => SearchCubit(searchRepo: firebaseSearchRepo),
         ),
 
+        // service cubit
+        BlocProvider<ServiceCubit>(
+          create:
+              (context) => ServiceCubit(
+                serviceRepo: firebaseServiceRepo,
+                storageRepo: firebaseStorageRepo,
+              ),
+        ),
+
         // theme cubit
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
       ],
@@ -97,7 +111,6 @@ class MyApp extends StatelessWidget {
               theme: currentTheme,
               home: BlocConsumer<AuthCubit, AuthState>(
                 builder: (context, authState) {
-                  
                   // unauthenticated
                   if (authState is Unauthenticated) {
                     return const AuthPage();
@@ -107,7 +120,6 @@ class MyApp extends StatelessWidget {
                   if (authState is Authenticated) {
                     return const HomePage();
                   }
-
                   // loading...
                   else {
                     return Scaffold(
@@ -129,7 +141,6 @@ class MyApp extends StatelessWidget {
                     ).showSnackBar(SnackBar(content: Text(state.message)));
                   }
                 },
-
               ),
             ),
       ),
