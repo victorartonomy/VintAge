@@ -62,7 +62,7 @@ class _SingleServicePageState extends State<SingleServicePage> {
         title: Text(widget.service.title),
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios),
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.secondary,
         actions: [
           // delete
           if (isOwnService)

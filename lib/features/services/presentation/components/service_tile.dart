@@ -105,8 +105,7 @@ class _ServiceTileState extends State<ServiceTile> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: 200,
-          width: 200,
+          height: 250,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -200,9 +199,13 @@ class _ServiceTileState extends State<ServiceTile> {
                           );
                         },
                       ),
-                      Text(
-                        widget.service.description,
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                      Expanded(
+                        child: Text(
+                          widget.service.description,
+                          style: TextStyle(color: Colors.white70, fontSize: 15),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const SizedBox(height: 10),
                     ],
