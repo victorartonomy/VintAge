@@ -49,6 +49,7 @@ dependencies:
   hidden_drawer_menu: ^3.0.1
   smooth_page_indicator: ^1.2.1
   flutter_launcher_icons: ^0.14.4
+  flutter_rating_bar: ^4.0.1
 
 flutter_icons:
   android: true

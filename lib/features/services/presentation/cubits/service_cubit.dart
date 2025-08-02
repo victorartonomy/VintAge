@@ -65,4 +65,25 @@ class ServiceCubit extends Cubit<ServiceStates> {
     }
   }
 
+  // toggle likes
+  Future<void> toggleLike(String serviceId, String userId) async {
+    try {
+      await serviceRepo.toggleLikeService(serviceId, userId);
+    }
+    catch (e) {
+      emit(ServicesError("Failed to toggle like: $e"));
+    }
+  }
+
+  // delete service
+  Future<void> deleteService(String serviceId) async {
+    try {
+      await serviceRepo.deleteService(serviceId);
+    }
+    catch (e) {
+      emit(ServicesError("Failed to delete service: $e"));
+    }
+  }
+
+
 }

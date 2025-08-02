@@ -78,6 +78,7 @@ class _ServicesPageState extends State<ServicesPage> {
           // loaded
           else if (state is ServicesLoaded) {
             final allServices = state.services;
+            final likedServices = allServices.where((service) => service.likes.contains(currentUser?.uid)).toList();
 
             if (allServices.isEmpty) {
               return const Center(child: Text("No services available"));
@@ -92,6 +93,41 @@ class _ServicesPageState extends State<ServicesPage> {
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: <Widget>[
+                    // Favourites
+                    Row(
+                      children: [
+                        Text(
+                          "Favourites",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: likedServices.length,
+                      itemBuilder: (context, index) {
+                        return ServiceTile(service: likedServices[index]);
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
                     // All Services
                     Row(
                       children: [

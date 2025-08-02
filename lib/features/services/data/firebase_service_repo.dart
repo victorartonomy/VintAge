@@ -33,9 +33,12 @@ class FirebaseServiceRepo implements ServiceRepo {
   }
 
   @override
-  Future<void> deleteService(String serviceId) {
-    // TODO: implement deleteService
-    throw UnimplementedError();
+  Future<void> deleteService(String serviceId) async {
+    try {
+      await servicesCollection.doc(serviceId).delete();
+    } catch (e) {
+      throw Exception("Failed to delete service: $e");
+    }
   }
 
   @override
@@ -56,19 +59,50 @@ class FirebaseServiceRepo implements ServiceRepo {
   }
 
   @override
-  Future<List<Service>> fetchServicesByUserId(String userId) {
-    // TODO: implement fetchServicesByUserId
-    throw UnimplementedError();
+  Future<List<Service>> fetchServicesByUserId(String userId) async {
+    try {
+
+      // fetch posts snapshot with this uid
+      final servicesSnapshot = await servicesCollection.where('uid', isEqualTo: userId).get();
+
+      // convert from JSON to lists of services
+      final List<Service> userServices = servicesSnapshot.docs
+          .map((doc) => Service.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return userServices;
+    } catch (e) {
+      throw Exception("Failed to fetch services: $e");
+    }
   }
 
   @override
-  Future<void> toggleLikeService(String serviceId, String userId) {
-    // TODO: implement toggleLikeService
-    throw UnimplementedError();
+  Future<void> toggleLikeService(String serviceId, String userId) async {
+    try {
+
+      // get the service document from firestore
+      final serviceDoc = await servicesCollection.doc(serviceId).get();
+
+      // check if doc exists
+      if (serviceDoc.exists) {
+        final service = Service.fromJson(serviceDoc.data() as Map<String, dynamic>);
+
+        // check if user has already liked the service
+        if (service.likes.contains(userId)) {
+          // remove user from likes
+          service.likes.remove(userId);
+        } else {
+          // add user to likes
+          service.likes.add(userId);
+        }
+
+        // update the service document in firestore
+        await servicesCollection.doc(serviceId).update({'likes': service.likes,});
+      } else {
+        throw Exception("Service not found");
+      }
+    } catch (e) {
+      throw Exception("Failed to toggle like: $e");
+      }
+    }
   }
-
-
-  // methods to implement
-
-
-}

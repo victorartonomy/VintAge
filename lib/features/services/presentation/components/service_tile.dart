@@ -1,6 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
+import 'package:vintage/features/authentication/domain/entities/app_user.dart';
+import 'package:vintage/features/profile/domain/entities/profile_user.dart';
 import 'package:vintage/features/services/domain/entities/service.dart';
+import '../../../authentication/presentation/cubits/auth_cubit.dart';
+import '../../../profile/presentation/cubits/profile_cubit.dart';
+import '../cubits/service_cubit.dart';
 import '../pages/single_service_page.dart';
 
 class ServiceTile extends StatefulWidget {
@@ -12,13 +20,87 @@ class ServiceTile extends StatefulWidget {
 }
 
 class _ServiceTileState extends State<ServiceTile> {
+  // cubits
+  late final serviceCubit = context.read<ServiceCubit>();
+  late final profileCubit = context.read<ProfileCubit>();
+
+  bool isOwnService = false;
+
+  // current user
+  AppUser? currentUser;
+
+  // service user
+  ProfileUser? serviceUser;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentUser();
+    fetchServiceUser();
+  }
+
+  void getCurrentUser() {
+    final authCubit = context.read<AuthCubit>();
+    currentUser = authCubit.currentUser;
+    isOwnService = (widget.service.userId == currentUser!.uid);
+  }
+
+  Future<void> fetchServiceUser() async {
+    final fetchedUser = await profileCubit.getUserProfile(
+      widget.service.userId,
+    );
+    if (fetchedUser != null) {
+      setState(() {
+        serviceUser = fetchedUser;
+      });
+    }
+  }
+
+  /*
+
+  Likes
+
+   */
+
+  // user tapped like button
+  void toggleLike() {
+    // current like status
+    final isLiked = widget.service.likes.contains(currentUser!.uid);
+
+    // optimistically like and update UI
+    setState(() {
+      if (isLiked) {
+        widget.service.likes.remove(currentUser!.uid);
+      } else {
+        widget.service.likes.add(currentUser!.uid);
+      }
+    });
+
+    // update like
+    serviceCubit.toggleLike(widget.service.id, currentUser!.uid).catchError((
+      error,
+    ) {
+      // if error undo like
+      setState(() {
+        if (isLiked) {
+          widget.service.likes.add(currentUser!.uid);
+        } else {
+          widget.service.likes.remove(currentUser!.uid);
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap:
           () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const SingleServicePage()),
+            MaterialPageRoute(
+              builder: (context) => SingleServicePage(service: widget.service),
+            ),
           ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -51,6 +133,79 @@ class _ServiceTileState extends State<ServiceTile> {
                         Colors.transparent.withOpacity(.2),
                       ],
                     ),
+                  ),
+                ),
+
+                // Text info
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: toggleLike,
+                            icon: Icon(
+                              widget.service.likes.contains(currentUser!.uid)
+                                  ? CupertinoIcons.heart_fill
+                                  : IconoirIcons.heart,
+                              color:
+                                  widget.service.likes.contains(
+                                        currentUser!.uid,
+                                      )
+                                      ? Colors.red
+                                      : Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.service.title,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: widget.service.lstServices.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Expanded(
+                                child: Text(
+                                  widget.service.lstServices[index],
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.tertiary,
+                                    fontSize: 15,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Text(
+                        widget.service.description,
+                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                   ),
                 ),
               ],

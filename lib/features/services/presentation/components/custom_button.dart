@@ -26,6 +26,9 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(icon, color: foregroundColor,),
             const SizedBox(width: 8),
