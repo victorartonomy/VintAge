@@ -205,7 +205,7 @@ class _ServiceTileState extends State<ServiceTile> {
                       RatingWidget(
                         service: widget.service,
                         size: 16.0,
-                        color: Colors.white,
+                        color: Colors.amber,
                       ),
                       const SizedBox(height: 10),
                       Expanded(

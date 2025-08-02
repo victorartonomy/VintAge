@@ -186,13 +186,14 @@ class _RatingWidgetState extends State<RatingWidget> {
             style: TextStyle(
               fontSize: widget.size * 0.6,
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           if (totalRatings > 0) ...[
             SizedBox(width: 4),
             Text(
               '($totalRatings)',
-              style: TextStyle(fontSize: widget.size * 0.5, color: Colors.grey),
+              style: TextStyle(fontSize: widget.size * 0.5, color: Theme.of(context).colorScheme.primary),
             ),
           ],
         ],
