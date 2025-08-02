@@ -10,30 +10,42 @@ import '../../domain/repos/service_repo.dart';
 class ServiceCubit extends Cubit<ServiceStates> {
   final ServiceRepo serviceRepo;
   final StorageRepo storageRepo;
-  ServiceCubit({required this.serviceRepo, required this.storageRepo}) : super(ServicesInitial());
+  ServiceCubit({required this.serviceRepo, required this.storageRepo})
+    : super(ServicesInitial());
 
   // create a new service
   Future<void> createService(
-      Service service, {
-        List<String>? imagePaths,
-        List<Uint8List>? imageBytesList,
-      }) async {
+    Service service, {
+    List<String>? imagePaths,
+    List<Uint8List>? imageBytesList,
+  }) async {
     List<String>? imageUrls;
     try {
       // Mobile: upload multiple image paths
       if (imagePaths != null && imagePaths.isNotEmpty) {
         emit(ServicesUploading());
         // Ensure you pass list of both image paths and file names
-        final fileNames = imagePaths.map((p) => '${service.id}_${p.split('/').last}').toList();
-        imageUrls = await storageRepo.uploadServiceImagesMobile(imagePaths, fileNames);
+        final fileNames =
+            imagePaths
+                .map((p) => '${service.id}_${p.split('/').last}')
+                .toList();
+        imageUrls = await storageRepo.uploadServiceImagesMobile(
+          imagePaths,
+          fileNames,
+        );
       }
       // Web: upload multiple image files (bytes)
       else if (imageBytesList != null && imageBytesList.isNotEmpty) {
         emit(ServicesUploading());
         // Assign unique file names as needed
-        final fileNames =
-        List.generate(imageBytesList.length, (i) => "${service.id}_$i.jpg");
-        imageUrls = await storageRepo.uploadServiceImagesWeb(imageBytesList, fileNames);
+        final fileNames = List.generate(
+          imageBytesList.length,
+          (i) => "${service.id}_$i.jpg",
+        );
+        imageUrls = await storageRepo.uploadServiceImagesWeb(
+          imageBytesList,
+          fileNames,
+        );
       }
       // else: no images
       else {
@@ -59,8 +71,7 @@ class ServiceCubit extends Cubit<ServiceStates> {
       emit(ServicesLoading());
       final services = await serviceRepo.fetchAllServices();
       emit(ServicesLoaded(services));
-    }
-    catch (e) {
+    } catch (e) {
       emit(ServicesError("Failed to fetch services: $e"));
     }
   }
@@ -69,8 +80,7 @@ class ServiceCubit extends Cubit<ServiceStates> {
   Future<void> toggleLike(String serviceId, String userId) async {
     try {
       await serviceRepo.toggleLikeService(serviceId, userId);
-    }
-    catch (e) {
+    } catch (e) {
       emit(ServicesError("Failed to toggle like: $e"));
     }
   }
@@ -79,11 +89,29 @@ class ServiceCubit extends Cubit<ServiceStates> {
   Future<void> deleteService(String serviceId) async {
     try {
       await serviceRepo.deleteService(serviceId);
-    }
-    catch (e) {
+    } catch (e) {
       emit(ServicesError("Failed to delete service: $e"));
     }
   }
 
+  // rate service
+  Future<void> rateService(String serviceId, String userId, int rating) async {
+    try {
+      await serviceRepo.rateService(serviceId, userId, rating);
+      // Re-fetch all services to update the UI
+      await fetchAllServices();
+    } catch (e) {
+      emit(ServicesError("Failed to rate service: $e"));
+    }
+  }
 
+  // get user rating for a service
+  Future<int?> getUserRating(String serviceId, String userId) async {
+    try {
+      return await serviceRepo.getUserRating(serviceId, userId);
+    } catch (e) {
+      emit(ServicesError("Failed to get user rating: $e"));
+      return null;
+    }
+  }
 }

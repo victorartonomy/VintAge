@@ -78,7 +78,12 @@ class _ServicesPageState extends State<ServicesPage> {
           // loaded
           else if (state is ServicesLoaded) {
             final allServices = state.services;
-            final likedServices = allServices.where((service) => service.likes.contains(currentUser?.uid)).toList();
+            final likedServices =
+                allServices
+                    .where(
+                      (service) => service.likes.contains(currentUser?.uid),
+                    )
+                    .toList();
 
             if (allServices.isEmpty) {
               return const Center(child: Text("No services available"));
@@ -114,7 +119,11 @@ class _ServicesPageState extends State<ServicesPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -124,6 +133,79 @@ class _ServicesPageState extends State<ServicesPage> {
                       itemCount: likedServices.length,
                       itemBuilder: (context, index) {
                         return ServiceTile(service: likedServices[index]);
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Top Rated Services
+                    Row(
+                      children: [
+                        Text(
+                          "Top Rated",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // Get top rated services (services with ratings > 0, sorted by average rating)
+                    Builder(
+                      builder: (context) {
+                        final topRatedServices =
+                            allServices
+                                .where((service) => service.averageRating > 0)
+                                .toList()
+                              ..sort(
+                                (a, b) =>
+                                    b.averageRating.compareTo(a.averageRating),
+                              );
+
+                        if (topRatedServices.isEmpty) {
+                          return SizedBox(
+                            height: 100,
+                            child: Center(
+                              child: Text(
+                                "No rated services yet",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              topRatedServices.length > 3
+                                  ? 3
+                                  : topRatedServices.length,
+                          itemBuilder: (context, index) {
+                            return ServiceTile(
+                              service: topRatedServices[index],
+                            );
+                          },
+                        );
                       },
                     ),
                     const SizedBox(height: 20),
@@ -149,7 +231,11 @@ class _ServicesPageState extends State<ServicesPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),

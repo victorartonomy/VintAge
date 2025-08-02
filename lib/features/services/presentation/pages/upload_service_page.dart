@@ -113,6 +113,7 @@ class _UploadServicePageState extends State<UploadServicePage> {
       ratings: 0,
       likes: [],
       comments: [],
+      userRatings: {},
     );
 
     // service cubit

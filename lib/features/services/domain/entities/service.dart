@@ -12,6 +12,7 @@ class Service {
   final String address;
   final DateTime timestamp;
   final int ratings;
+  final Map<String, int> userRatings; // userId -> rating (1-5)
   final List<String> likes;
   final List<String> comments;
 
@@ -29,12 +30,29 @@ class Service {
     required this.address,
     required this.timestamp,
     required this.ratings,
+    required this.userRatings,
     required this.likes,
     required this.comments,
   });
 
+  // Get average rating
+  double get averageRating {
+    if (userRatings.isEmpty) return 0.0;
+    int totalRating = userRatings.values.fold(0, (sum, rating) => sum + rating);
+    return totalRating / userRatings.length;
+  }
+
+  // Get user's rating for this service
+  int? getUserRating(String userId) {
+    return userRatings[userId];
+  }
+
   // create modified copies of service
-  Service copyWith({List<String>? imagesUrl}) {
+  Service copyWith({
+    List<String>? imagesUrl,
+    Map<String, int>? userRatings,
+    int? ratings,
+  }) {
     return Service(
       id: id,
       userId: userId,
@@ -48,7 +66,8 @@ class Service {
       timing: timing,
       address: address,
       timestamp: timestamp,
-      ratings: ratings,
+      ratings: ratings ?? this.ratings,
+      userRatings: userRatings ?? this.userRatings,
       likes: likes,
       comments: comments,
     );
@@ -70,6 +89,7 @@ class Service {
       "address": address,
       "timestamp": timestamp,
       "ratings": ratings,
+      "userRatings": userRatings,
       "likes": likes,
       "comments": comments,
     };
@@ -90,7 +110,8 @@ class Service {
       timing: json["timing"],
       address: json["address"],
       timestamp: json["timestamp"].toDate(),
-      ratings: json["ratings"],
+      ratings: json["ratings"] ?? 0,
+      userRatings: Map<String, int>.from(json['userRatings'] ?? {}),
       likes: List<String>.from(json['likes'] ?? []),
       comments: List<String>.from(json['comments'] ?? []),
     );

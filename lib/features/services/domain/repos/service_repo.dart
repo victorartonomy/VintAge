@@ -9,4 +9,6 @@ abstract class ServiceRepo {
   Future<void> toggleLikeService(String serviceId, String userId);
   Future<void> addComment(String serviceId, Comment comment);
   Future<void> deleteComment(String serviceId, String commentId);
+  Future<void> rateService(String serviceId, String userId, int rating);
+  Future<int?> getUserRating(String serviceId, String userId);
 }

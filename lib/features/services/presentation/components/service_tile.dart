@@ -10,6 +10,7 @@ import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../../../profile/presentation/cubits/profile_cubit.dart';
 import '../cubits/service_cubit.dart';
 import '../pages/single_service_page.dart';
+import 'rating_widget.dart';
 
 class ServiceTile extends StatefulWidget {
   final Service service;
@@ -105,7 +106,7 @@ class _ServiceTileState extends State<ServiceTile> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: 250,
+          height: 300,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -170,35 +171,43 @@ class _ServiceTileState extends State<ServiceTile> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: widget.service.lstServices.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.red,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Expanded(
+                      SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.service.lstServices.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 5, right: 5),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   widget.service.lstServices[index],
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     fontSize: 15,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
+                      const SizedBox(height: 10),
+                      // Rating widget
+                      RatingWidget(
+                        service: widget.service,
+                        size: 16.0,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 10),
                       Expanded(
                         child: Text(
                           widget.service.description,

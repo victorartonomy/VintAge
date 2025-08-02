@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 import 'package:vintage/features/profile/domain/entities/profile_user.dart';
@@ -9,6 +8,7 @@ import 'package:vintage/features/profile/presentation/cubits/profile_cubit.dart'
 import 'package:vintage/features/services/domain/entities/service.dart';
 
 import '../components/custom_button.dart';
+import '../components/rating_widget.dart';
 import '../cubits/service_cubit.dart';
 
 class SingleServicePage extends StatefulWidget {
@@ -152,22 +152,11 @@ class _SingleServicePageState extends State<SingleServicePage> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  RatingBar(
-                    minRating: 1,
-                    maxRating: 5,
-                    initialRating: 0.5,
-                    itemSize: 25,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    ratingWidget: RatingWidget(
-                      full: Icon(Icons.star, color: Colors.amber),
-                      half: Icon(Icons.star_half, color: Colors.amber),
-                      empty: Icon(
-                        Icons.star_border_outlined,
-                        color: Colors.amber,
-                      ),
-                    ),
-                    onRatingUpdate: (double value) {},
+                  RatingWidget(
+                    service: widget.service,
+                    showRatingDialog: true,
+                    size: 25.0,
+                    color: Colors.amber,
                   ),
                 ],
               ),
@@ -217,11 +206,11 @@ class _SingleServicePageState extends State<SingleServicePage> {
               height: 45,
               child: ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.service.lstServices.length,
                 itemBuilder: (context, index) {
                   return Container(
+                    margin: EdgeInsets.only(right: 10),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.red[400],
