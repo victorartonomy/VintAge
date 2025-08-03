@@ -28,6 +28,11 @@ class DrawerItems {
     icon: IconoirIcons.message,
   );
 
+  static const shop = DrawerItem(
+    title: "Shop",
+    icon: IconoirIcons.shop,
+  );
+
   static const setting = DrawerItem(
     title: "Settings",
     icon: IconoirIcons.settings,
@@ -38,5 +43,5 @@ class DrawerItems {
     icon: IconoirIcons.logOut,
   );
 
-  static final List<DrawerItem> all = [blog, services, search, messages, setting, logout];
+  static final List<DrawerItem> all = [blog, services, search, messages, shop, setting, logout];
 }

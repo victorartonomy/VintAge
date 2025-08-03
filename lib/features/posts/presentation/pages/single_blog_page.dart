@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
+import 'package:vintage/features/services/presentation/components/custom_button.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -99,8 +100,8 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
 
     // update like
     postCubit.toggleLikePost(widget.post.id, currentUser!.uid).catchError((
-        error,
-        ) {
+      error,
+    ) {
       // if error, undo like
       setState(() {
         if (isLiked) {
@@ -112,6 +113,11 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
     });
   }
 
+  // delete post
+  void deletePost(String postId) {
+    postCubit.deletePost(postId);
+    Navigator.pop(context);
+  }
 
   // BUILD UI
   @override
@@ -128,8 +134,16 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
         title: Text("Blog Details"),
         elevation: 0,
         foregroundColor: Colors.white70,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
-        surfaceTintColor: Colors.transparent,
+        actions: [
+          if (isOwnPost)
+            CustomButton(
+              icon: IconoirIcons.trash,
+              text: "Delete",
+              backgroundColor: Colors.red[400],
+              foregroundColor: Theme.of(context).colorScheme.secondary,
+              onTap: () => deletePost(widget.post.id),
+            ),
+        ],
       ),
 
       // Body
@@ -172,7 +186,6 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // TODO: check if post is liked by the user?
                   GestureDetector(
                     onTap: toggleLike,
                     child: Icon(
@@ -180,11 +193,9 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
                           ? CupertinoIcons.suit_heart_fill
                           : IconoirIcons.heart,
                       color:
-                      widget.post.likes.contains(currentUser!.uid)
-                          ? Colors.red
-                          : Theme.of(
-                        context,
-                      ).colorScheme.inversePrimary,
+                          widget.post.likes.contains(currentUser!.uid)
+                              ? Colors.red
+                              : Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                   SizedBox(width: 10),

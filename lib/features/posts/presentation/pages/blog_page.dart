@@ -4,6 +4,7 @@ import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:vintage/features/posts/presentation/components/blog_tile.dart';
 import 'package:vintage/features/posts/presentation/pages/upload_blog_page.dart';
+import 'package:vintage/features/services/presentation/components/custom_button.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -37,6 +38,7 @@ class _BlogPageState extends State<BlogPage> {
     currentUser = authCubit.currentUser;
   }
 
+  // fetch all posts
   void fetchAllPosts() {
     postCubit.fetchAllPosts();
   }
@@ -57,17 +59,20 @@ class _BlogPageState extends State<BlogPage> {
         foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Theme.of(context).colorScheme.secondary,
         actions: [
-          IconButton(
-            onPressed:
-                () => Navigator.push(
+          CustomButton(
+            icon: IconoirIcons.upload,
+            text: "Upload",
+            backgroundColor: Colors.green[400],
+            foregroundColor: Theme.of(context).colorScheme.secondary,
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const UploadBlogPage(),
               ),
             ),
-            icon: Icon(IconoirIcons.upload),
           ),
         ],
+        actionsPadding: const EdgeInsets.only(right: 20),
       ),
 
       // body

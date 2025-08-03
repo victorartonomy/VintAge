@@ -8,6 +8,7 @@ import 'package:vintage/features/profile/presentation/pages/profile_page.dart';
 import 'package:vintage/features/search/presentation/pages/search_page.dart';
 import 'package:vintage/features/services/presentation/pages/services_page.dart';
 import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
+import 'package:vintage/features/shop/presentation/pages/shop_page.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../components/drawer_items.dart';
 
@@ -150,6 +151,8 @@ class _HomePageState extends State<HomePage> {
         return SearchPage(openDrawer: openDrawer);
       case DrawerItems.messages:
         return MessagesPage(openDrawer: openDrawer);
+      case DrawerItems.shop:
+        return ShopPage(openDrawer: openDrawer);
       case DrawerItems.setting:
         return SettingsPage(openDrawer: openDrawer);
       case DrawerItems.logout:

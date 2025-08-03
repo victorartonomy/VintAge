@@ -24,7 +24,7 @@ class MessagesPage extends StatelessWidget {
         children: [
           Icon(IconoirIcons.message, size: 100,),
           SizedBox(height: 20,),
-          Text("Messages feature coming soon"),
+          Text("Coming soon..."),
         ],
       )),
     );

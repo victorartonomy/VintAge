@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
+import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/features/services/presentation/components/service_tile.dart';
 import 'package:vintage/features/services/presentation/pages/upload_service_page.dart';
 
@@ -55,17 +56,21 @@ class _ServicesPageState extends State<ServicesPage> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.primary,
         actions: [
-          IconButton(
-            onPressed:
+          CustomButton(
+            icon: IconoirIcons.upload,
+            text: "Upload",
+            backgroundColor: Colors.green[400],
+            foregroundColor: Theme.of(context).colorScheme.secondary,
+            onTap:
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const UploadServicePage(),
                   ),
                 ),
-            icon: const Icon(IconoirIcons.plus),
           ),
         ],
+        actionsPadding: const EdgeInsets.only(right: 20),
       ),
 
       // body
@@ -86,7 +91,16 @@ class _ServicesPageState extends State<ServicesPage> {
                     .toList();
 
             if (allServices.isEmpty) {
-              return const Center(child: Text("No services available"));
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(IconoirIcons.suitcase, size: 100),
+                    SizedBox(height: 20),
+                    Text("No services available..."),
+                  ],
+                ),
+              );
             }
 
             return RefreshIndicator(
