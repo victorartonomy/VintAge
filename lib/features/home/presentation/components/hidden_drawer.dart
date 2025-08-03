@@ -151,7 +151,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
                               decoration: BoxDecoration(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.primary.withOpacity(0.18),
+                                ).colorScheme.primary.withValues(alpha: 0.18, red: 2, green: 0, blue: 0),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(

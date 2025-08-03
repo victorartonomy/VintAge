@@ -129,8 +129,8 @@ class _ServiceTileState extends State<ServiceTile> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        Colors.red.withOpacity(.6),
-                        Colors.transparent.withOpacity(.2),
+                        Colors.red.withAlpha(200),
+                        Colors.transparent.withAlpha(50),
                       ],
                     ),
                   ),
