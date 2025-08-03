@@ -138,6 +138,7 @@ class _RegisterPage extends State<RegisterPage> {
                   controller: pwController,
                   hintText: "Enter Password",
                   obscureText: true,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 10),
 
@@ -146,6 +147,7 @@ class _RegisterPage extends State<RegisterPage> {
                   controller: confirmPwController,
                   hintText: "Re-Enter Password",
                   obscureText: true,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 25),
 

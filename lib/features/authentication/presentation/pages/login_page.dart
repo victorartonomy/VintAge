@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: pwController,
                   hintText: "Enter Password",
                   obscureText: true,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 25),
 
