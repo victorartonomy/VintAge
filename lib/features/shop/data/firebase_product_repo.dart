@@ -105,9 +105,36 @@ class FirebaseProductRepo implements ProductRepo {
   }
 
   @override
-  Future<void> rateProduct(String productId, String userId, int rating) {
-    // TODO: implement rateProduct
-    throw UnimplementedError();
+  Future<void> rateProduct(String productId, String userId, int rating) async {
+    try {
+      // Validate rating (1-5)
+      if (rating < 1 || rating > 5) {
+        throw Exception("Rating must be between 1 and 5");
+      }
+
+      // get the product document from firestore
+      final productDoc = await productsCollection.doc(productId).get();
+
+      // check if doc exists
+      if (productDoc.exists) {
+        final product = Product.fromJson(
+          productDoc.data() as Map<String, dynamic>,
+        );
+
+        // Create a new map with the updated rating
+        Map<String, int> updatedUserRatings = Map.from(product.userRatings);
+        updatedUserRatings[userId] = rating;
+
+        // update the product document in firestore
+        await productsCollection.doc(productId).update({
+          'userRatings': updatedUserRatings,
+        });
+      } else {
+        throw Exception("Product not found");
+      }
+    } catch (e) {
+      throw Exception("Failed to rate product: $e");
+    }
   }
 
   @override

@@ -1,4 +1,4 @@
-import '../../../profile/domain/entities/profile_user.dart';
+import '../../domain/entities/search_result.dart';
 
 abstract class SearchStates {}
 
@@ -7,9 +7,9 @@ class SearchInitial extends SearchStates {}
 class SearchLoading extends SearchStates {}
 
 class SearchLoaded extends SearchStates {
-  final List<ProfileUser?> users;
+  final SearchResult results;
 
-  SearchLoaded(this.users);
+  SearchLoaded(this.results);
 }
 
 class SearchError extends SearchStates {

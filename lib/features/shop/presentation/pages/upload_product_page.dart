@@ -106,6 +106,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
       contactNumber: contactNumberController.text,
       contactEmail: contactEmailController.text,
       address: addressController.text,
+      price: priceController.text,
       timestamp: DateTime.now(),
       ratings: 0,
       userRatings: {},

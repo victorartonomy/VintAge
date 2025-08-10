@@ -9,6 +9,7 @@ class Product {
   final String contactEmail;
   final String address;
   final DateTime timestamp;
+  final String price;
   final int ratings;
   final Map<String, int> userRatings; // userId -> rating (1-5)
   final List<String> likes;
@@ -25,6 +26,7 @@ class Product {
     required this.contactEmail,
     required this.address,
     required this.timestamp,
+    required this.price,
     required this.ratings,
     required this.userRatings,
     required this.likes,
@@ -60,6 +62,7 @@ class Product {
       contactEmail: contactEmail,
       address: address,
       timestamp: timestamp,
+      price: price,
       ratings: ratings ?? this.ratings,
       userRatings: userRatings ?? this.userRatings,
       likes: likes,
@@ -80,6 +83,7 @@ class Product {
       "contactEmail": contactEmail,
       "address": address,
       "timestamp": timestamp,
+      "price": price,
       "ratings": ratings,
       "userRatings": userRatings,
       "likes": likes,
@@ -99,6 +103,7 @@ class Product {
       contactNumber: json["contactNumber"],
       contactEmail: json["contactEmail"],
       address: json["address"],
+      price: json["price"],
       timestamp: json["timestamp"].toDate(),
       ratings: json["ratings"] ?? 0,
       userRatings: Map<String, int>.from(json['userRatings'] ?? {}),
