@@ -293,19 +293,16 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // sub heading
-                    Row(
-                      children: [
-                        Text(
-                          widget.post.subtitle,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      widget.post.subtitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 20,
+                      ),
                     ),
                     // paragraph
                     SizedBox(height: 10),
@@ -333,19 +330,25 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
                       obscureText: false,
                     ),
                     SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: addComment,
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(
-                          Theme.of(context).colorScheme.primary,
+                    // post button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: addComment,
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                              Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          child: Text(
+                            "Post",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        "Post",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
+                      ],
                     ),
 
                     // comments
@@ -400,7 +403,10 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
                         else if (state is PostsError) {
                           return Center(child: Text(state.message));
                         } else {
-                          return Center(child: Text("No Comments"));
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("No Comments.", style: TextStyle(color: Theme.of(context).colorScheme.primary,),),
+                          );
                         }
                       },
                     ),

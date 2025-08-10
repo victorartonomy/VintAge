@@ -81,6 +81,41 @@ class FirebaseStorageRepo implements StorageRepo {
   }
 
 
+  @override
+  Future<List<String>?> uploadProductImagesMobile(List<String> paths, List<String> fileNames) async {
+    try {
+      List<String> urls = [];
+      for (int i = 0; i < paths.length; i++) {
+        String? url = await _uploadFile(paths[i], fileNames[i], "product_images");
+        if (url != null) {
+          urls.add(url);
+        }
+      }
+      return urls;
+    } catch (e) {
+      // Log error somewhere or rethrow for upper layers
+      return null;
+    }
+  }
+
+  @override
+  Future<List<String>?> uploadProductImagesWeb(List<Uint8List> files, List<String> fileNames) async {
+    try {
+      List<String> urls = [];
+      for (int i = 0; i < files.length; i++) {
+        String? url = await _uploadBytes(files[i], fileNames[i], "product_images");
+        if (url != null) {
+          urls.add(url);
+        }
+      }
+      return urls;
+    } catch (e) {
+      // Log error somewhere or rethrow for upper layers
+      return null;
+    }
+  }
+
+
   /*
 
   Helper Methods - to upload files to storage

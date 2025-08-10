@@ -38,7 +38,6 @@ class _RegisterPage extends State<RegisterPage> {
 
   // Register function
   void register() {
-
     // String
     String name = nameController.text.trim();
     String email = emailController.text.trim();
@@ -49,29 +48,25 @@ class _RegisterPage extends State<RegisterPage> {
     final authCubit = context.read<AuthCubit>();
 
     // ensure fields arnt empty
-    if (name.isNotEmpty && email.isNotEmpty && pw.isNotEmpty && confirmPw.isNotEmpty) {
-
+    if (name.isNotEmpty &&
+        email.isNotEmpty &&
+        pw.isNotEmpty &&
+        confirmPw.isNotEmpty) {
       // if passwords match
       if (pw == confirmPw) {
         authCubit.register(email, pw, name);
       }
-
       // if passwords don't match
       else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Passwords do not match"),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
       }
     }
-
     // if fields are empty
     else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("All fields must be filled"),
-        ),
+        const SnackBar(content: Text("All fields must be filled")),
       );
     }
   }
@@ -89,97 +84,97 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-
       backgroundColor: Theme.of(context).colorScheme.surface,
-
       body: Center(
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                Icon(
-                  Icons.flutter_dash,
-                  size: 120,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                SizedBox(height: 10),
-
-                // Welcome
-                Text(
-                  "Welcome",
-                  style: TextStyle(
-                    fontSize: 40,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo
+                  Icon(
+                    Icons.flutter_dash,
+                    size: 120,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                ),
-                SizedBox(height: 25),
+                  SizedBox(height: 10),
 
-                // Name
-                MyTextField(
-                  controller: nameController,
-                  hintText: "Enter Name",
-                  obscureText: false,
-                ),
-                SizedBox(height: 10),
-
-                // Email
-                MyTextField(
-                  controller: emailController,
-                  hintText: "Enter Email",
-                  obscureText: false,
-                ),
-                SizedBox(height: 10),
-
-                // Password
-                MyTextField(
-                  controller: pwController,
-                  hintText: "Enter Password",
-                  obscureText: true,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 10),
-
-                // Confirm Password
-                MyTextField(
-                  controller: confirmPwController,
-                  hintText: "Re-Enter Password",
-                  obscureText: true,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 25),
-
-                // Register Button
-                MyButton(onTap: register, text: "Register"),
-                SizedBox(height: 10),
-
-                // Go to register button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Already a Member?",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 15,
-                      ),
+                  // Welcome
+                  Text(
+                    "Welcome",
+                    style: TextStyle(
+                      fontSize: 40,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    GestureDetector(
-                      onTap: widget.togglePages,
-                      child: Text(
-                        " Login",
+                  ),
+                  SizedBox(height: 25),
+
+                  // Name
+                  MyTextField(
+                    controller: nameController,
+                    hintText: "Enter Name",
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10),
+
+                  // Email
+                  MyTextField(
+                    controller: emailController,
+                    hintText: "Enter Email",
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10),
+
+                  // Password
+                  MyTextField(
+                    controller: pwController,
+                    hintText: "Enter Password",
+                    obscureText: true,
+                    maxLines: 1,
+                  ),
+                  SizedBox(height: 10),
+
+                  // Confirm Password
+                  MyTextField(
+                    controller: confirmPwController,
+                    hintText: "Re-Enter Password",
+                    obscureText: true,
+                    maxLines: 1,
+                  ),
+                  SizedBox(height: 25),
+
+                  // Register Button
+                  MyButton(onTap: register, text: "Register"),
+                  SizedBox(height: 10),
+
+                  // Go to register button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Already a Member?",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: 15,
-                          fontWeight: FontWeight.bold
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      GestureDetector(
+                        onTap: widget.togglePages,
+                        child: Text(
+                          " Login",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

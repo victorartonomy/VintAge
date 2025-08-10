@@ -12,6 +12,8 @@ import 'features/posts/presentation/cubits/post_cubits.dart';
 import 'features/profile/data/firebase_profile_repo.dart';
 import 'features/profile/presentation/cubits/profile_cubit.dart';
 import 'features/search/data/firebase_search_repo.dart';
+import 'features/shop/data/firebase_product_repo.dart';
+import 'features/shop/presentation/cubits/product_cubit.dart';
 import 'features/storage/data/firebase_storage_repo.dart';
 import 'features/services/data/firebase_service_repo.dart';
 import 'features/services/presentation/cubits/service_cubit.dart';
@@ -56,6 +58,9 @@ class MyApp extends StatelessWidget {
   // services repos
   final firebaseServiceRepo = FirebaseServiceRepo();
 
+  // product repos
+  final firebaseProductRepo = FirebaseProductRepo();
+
   MyApp({super.key});
 
   @override
@@ -97,6 +102,15 @@ class MyApp extends StatelessWidget {
           create:
               (context) => ServiceCubit(
                 serviceRepo: firebaseServiceRepo,
+                storageRepo: firebaseStorageRepo,
+              ),
+        ),
+
+        // product cubit
+        BlocProvider<ProductCubit>(
+          create:
+              (context) => ProductCubit(
+                productRepo: firebaseProductRepo,
                 storageRepo: firebaseStorageRepo,
               ),
         ),

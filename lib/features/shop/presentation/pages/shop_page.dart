@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
+import 'package:vintage/features/services/presentation/components/custom_button.dart';
+import 'package:vintage/features/shop/presentation/pages/upload_product_page.dart';
 
 class ShopPage extends StatelessWidget {
   final VoidCallback openDrawer;
@@ -20,6 +22,19 @@ class ShopPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: const Text('Shop Page'),
+        actions: [
+          CustomButton(
+            icon: IconoirIcons.upload,
+            text: "Upload",
+            backgroundColor: Colors.green[400],
+            foregroundColor: Theme.of(context).colorScheme.secondary,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const UploadProductPage()));
+            }
+          ),
+        ],
+
+        actionsPadding: EdgeInsets.only(right: 10),
       ),
       body: const Center(
         child: Column(

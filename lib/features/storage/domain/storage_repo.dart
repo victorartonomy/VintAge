@@ -18,4 +18,10 @@ abstract class StorageRepo {
 
   // upload service images on web platform
   Future<List<String>?> uploadServiceImagesWeb(List<Uint8List> files, List<String> fileNames);
+
+  // upload service images on mobile platform
+  Future<List<String>?> uploadProductImagesMobile(List<String> paths, List<String> fileNames);
+
+  // upload service images on web platform
+  Future<List<String>?> uploadProductImagesWeb(List<Uint8List> files, List<String> fileNames);
 }

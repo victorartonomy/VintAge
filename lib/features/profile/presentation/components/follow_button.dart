@@ -35,7 +35,7 @@ class FollowButton extends StatelessWidget {
           padding: const EdgeInsets.all(25),
           onPressed: onPressed,
           color:
-              isFollowing ? Theme.of(context).colorScheme.primary : Colors.blue,
+              isFollowing ? Theme.of(context).colorScheme.primary : Colors.red[400],
           child: Text(
             isFollowing ? 'Unfollow' : 'Follow',
             style: TextStyle(
