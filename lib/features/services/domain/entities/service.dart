@@ -10,6 +10,7 @@ class Service {
   final String contactEmail;
   final String timing;
   final String address;
+  final String website;
   final DateTime timestamp;
   final int ratings;
   final Map<String, int> userRatings; // userId -> rating (1-5)
@@ -28,6 +29,7 @@ class Service {
     required this.contactEmail,
     required this.timing,
     required this.address,
+    required this.website,
     required this.timestamp,
     required this.ratings,
     required this.userRatings,
@@ -65,6 +67,7 @@ class Service {
       contactEmail: contactEmail,
       timing: timing,
       address: address,
+      website: website,
       timestamp: timestamp,
       ratings: ratings ?? this.ratings,
       userRatings: userRatings ?? this.userRatings,
@@ -87,6 +90,7 @@ class Service {
       "contactEmail": contactEmail,
       "timing": timing,
       "address": address,
+      "website": website,
       "timestamp": timestamp,
       "ratings": ratings,
       "userRatings": userRatings,
@@ -109,6 +113,7 @@ class Service {
       contactEmail: json["contactEmail"],
       timing: json["timing"],
       address: json["address"],
+      website: json["website"],
       timestamp: json["timestamp"].toDate(),
       ratings: json["ratings"] ?? 0,
       userRatings: Map<String, int>.from(json['userRatings'] ?? {}),

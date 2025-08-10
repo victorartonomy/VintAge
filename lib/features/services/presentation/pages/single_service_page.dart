@@ -249,6 +249,7 @@ class _SingleServicePageState extends State<SingleServicePage> {
               ),
             ),
             SizedBox(height: 10),
+
             // phone no
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -269,28 +270,52 @@ class _SingleServicePageState extends State<SingleServicePage> {
               ),
             ),
             SizedBox(height: 10),
+
             // email
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  Icon(
-                    IconoirIcons.mail,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    widget.service.contactEmail,
-                    style: TextStyle(
+            if (widget.service.contactEmail.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      IconoirIcons.mail,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                  ),
-                ],
+                    SizedBox(width: 10),
+                    Text(
+                      widget.service.contactEmail,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
             SizedBox(height: 10),
 
             // website
+            if (widget.service.website.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      IconoirIcons.webWindow,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      widget.service.website,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (widget.service.website.isNotEmpty) SizedBox(height: 10),
+
+            // timing
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
@@ -315,8 +340,8 @@ class _SingleServicePageState extends State<SingleServicePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: CustomButton(
-                text: "Book Now",
-                icon: IconoirIcons.book,
+                text: "Call Now",
+                icon: IconoirIcons.phone,
                 onTap: () {},
                 backgroundColor: Colors.redAccent,
                 foregroundColor: Theme.of(context).colorScheme.secondary,

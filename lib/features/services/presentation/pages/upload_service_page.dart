@@ -111,6 +111,7 @@ class _UploadServicePageState extends State<UploadServicePage> {
       contactEmail: contactEmailController.text,
       timing: timingController.text,
       address: addressController.text,
+      website: websiteController.text,
       timestamp: DateTime.now(),
       ratings: 0,
       likes: [],
