@@ -22,7 +22,6 @@ class SettingsPage extends StatelessWidget {
   // Build UI
   @override
   Widget build(BuildContext context) {
-
     // theme cubit
     final themeCubit = context.watch<ThemeCubit>();
 
@@ -35,17 +34,29 @@ class SettingsPage extends StatelessWidget {
 
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: IconButton(onPressed: openDrawer, icon: const Icon(IconoirIcons.menuScale)),
-        title: const Text("Settings"),
+        leading: IconButton(
+          onPressed: openDrawer,
+          icon: const Icon(IconoirIcons.menuScale),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(IconoirIcons.settings),
+            SizedBox(width: 10),
+            Text("Settings"),
+          ],
+        ),
         foregroundColor: Theme.of(context).colorScheme.primary,
-        centerTitle: true,
       ),
 
       body: Column(
         children: [
           // dark mode
           ListTile(
-            title: Text("Dark Mode", style: TextStyle(color: Theme.of(context).colorScheme.primary),),
+            title: Text(
+              "Dark Mode",
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            ),
             trailing: CupertinoSwitch(
               activeTrackColor: Theme.of(context).colorScheme.primary,
               inactiveTrackColor: Theme.of(context).colorScheme.secondary,

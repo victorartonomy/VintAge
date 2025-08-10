@@ -51,8 +51,14 @@ class _ServicesPageState extends State<ServicesPage> {
           onPressed: widget.openDrawer,
           icon: const Icon(IconoirIcons.menuScale),
         ),
-        title: const Text("Services"),
-        centerTitle: true,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(IconoirIcons.suitcase),
+            SizedBox(width: 8),
+            Text("Services"),
+          ],
+        ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.primary,
         actions: [

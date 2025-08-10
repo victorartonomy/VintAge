@@ -48,13 +48,22 @@ class _BlogPageState extends State<BlogPage> {
     final blogController = PageController(initialPage: 0);
 
     return Scaffold(
-
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       // appbar
       appBar: AppBar(
-        leading: IconButton(onPressed: widget.openDrawer, icon: const Icon(IconoirIcons.menuScale)),
-        title: const Text("Blog"),
+        leading: IconButton(
+          onPressed: widget.openDrawer,
+          icon: const Icon(IconoirIcons.menuScale),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(IconoirIcons.book),
+            SizedBox(width: 8),
+            Text("Blog"),
+          ],
+        ),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -64,12 +73,13 @@ class _BlogPageState extends State<BlogPage> {
             text: "Upload",
             backgroundColor: Colors.green[400],
             foregroundColor: Theme.of(context).colorScheme.secondary,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const UploadBlogPage(),
-              ),
-            ),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UploadBlogPage(),
+                  ),
+                ),
           ),
         ],
         actionsPadding: const EdgeInsets.only(right: 20),
@@ -82,11 +92,13 @@ class _BlogPageState extends State<BlogPage> {
           if (state is PostsLoading && state is PostsUploading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           // loaded
           else if (state is PostsLoaded) {
             final allPosts = state.posts;
-            final likedPosts = allPosts.where((post) => post.likes.contains(currentUser?.uid)).toList();
+            final likedPosts =
+                allPosts
+                    .where((post) => post.likes.contains(currentUser?.uid))
+                    .toList();
 
             if (allPosts.isEmpty) {
               return const Center(child: Text("No posts available"));
@@ -96,12 +108,11 @@ class _BlogPageState extends State<BlogPage> {
               onRefresh: () {
                 fetchAllPosts();
                 return Future.value();
-                },
+              },
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: <Widget>[
-
                     // Recent Blogs
                     Row(
                       children: [
@@ -123,7 +134,11 @@ class _BlogPageState extends State<BlogPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).colorScheme.primary),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -277,7 +292,13 @@ class _BlogPageState extends State<BlogPage> {
                     const SizedBox(height: 20),
 
                     // The End
-                    Text("The End!", style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.primary),),
+                    Text(
+                      "The End!",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -292,7 +313,6 @@ class _BlogPageState extends State<BlogPage> {
           }
         },
       ),
-
     );
   }
 }

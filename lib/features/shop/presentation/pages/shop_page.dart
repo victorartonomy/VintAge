@@ -42,9 +42,7 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(
@@ -57,7 +55,11 @@ class _ShopPageState extends State<ShopPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(IconoirIcons.shop, color: Theme.of(context).colorScheme.primary, size: 30),
+            Icon(
+              IconoirIcons.shop,
+              color: Theme.of(context).colorScheme.primary,
+              size: 30,
+            ),
             const SizedBox(width: 10),
             const Text('Shop'),
           ],
@@ -69,158 +71,208 @@ class _ShopPageState extends State<ShopPage> {
             backgroundColor: Colors.green[400],
             foregroundColor: Theme.of(context).colorScheme.secondary,
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const UploadProductPage()));
-            }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UploadProductPage(),
+                ),
+              );
+            },
           ),
         ],
 
         actionsPadding: EdgeInsets.only(right: 10),
       ),
       body: BlocBuilder<ProductCubit, ProductStates>(
-          builder: (context, state) {
+        builder: (context, state) {
+          // loading
+          if (state is ProductLoading || state is ProductUploading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          // loaded
+          else if (state is ProductLoaded) {
+            final allProducts = state.product;
+            final likedProducts =
+                allProducts
+                    .where(
+                      (product) => product.likes.contains(currentUser?.uid),
+                    )
+                    .toList();
 
-            // loading
-            if (state is ProductLoading || state is ProductUploading) {
-              return const Center(child: CircularProgressIndicator());
+            if (allProducts.isEmpty) {
+              return const Center(child: Text("No products available..."));
             }
 
-            // loaded
-            else if (state is ProductLoaded) {
-              final allProducts = state.product;
-              final likedProducts = allProducts
-                  .where(
-                      (product) => product.likes.contains(currentUser?.uid),
-              )
-                  .toList();
+            return RefreshIndicator(
+              onRefresh: () {
+                fetchAllProducts();
+                return Future.value();
+              },
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(height: 10),
 
-              if (allProducts.isEmpty) {
-                return const Center(
-                    child: Text("No products available...")
-                );
-              }
+                      // Liked Products
+                      Row(
+                        children: [
+                          Text(
+                            "Liked products",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "View all",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: likedProducts.length,
+                        itemBuilder: (context, index) {
+                          return ProductTile(product: likedProducts[index]);
+                        },
+                      ),
 
-              return RefreshIndicator(
-                onRefresh: () {
-                  fetchAllProducts();
-                  return Future.value();
-                },
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: <Widget>[
+                      // Top Rated Products
+                      Row(
+                        children: [
+                          Text(
+                            "Top rated products",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "View all",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // Get top rated services (services with ratings > 0, sorted by average rating)
+                      Builder(
+                        builder: (context) {
+                          final topRatedProduct =
+                              allProducts
+                                  .where((service) => service.averageRating > 0)
+                                  .toList()
+                                ..sort(
+                                  (a, b) => b.averageRating.compareTo(
+                                    a.averageRating,
+                                  ),
+                                );
 
-                        // Liked Products
-                        Row(
-                          children: [
-                            Text("Liked products", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20)),
-                            const Spacer(),
-                            Text("View all", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15)),
-                            const SizedBox(width: 10),
-                            Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.primary, size: 15),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: likedProducts.length,
-                            itemBuilder: (context, index) {
-                              return ProductTile(product: likedProducts[index]);
-                            },
-                        ),
-
-                        // Top Rated Products
-                        Row(
-                          children: [
-                            Text("Top rated products", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20)),
-                            const Spacer(),
-                            Text("View all", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15)),
-                            const SizedBox(width: 10),
-                            Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.primary, size: 15),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        // Get top rated services (services with ratings > 0, sorted by average rating)
-                        Builder(
-                          builder: (context) {
-                            final topRatedProduct =
-                            allProducts
-                                .where((service) => service.averageRating > 0)
-                                .toList()
-                              ..sort(
-                                    (a, b) =>
-                                    b.averageRating.compareTo(a.averageRating),
-                              );
-
-                            if (topRatedProduct.isEmpty) {
-                              return SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: Text(
-                                    "No rated services yet",
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: 16,
-                                    ),
+                          if (topRatedProduct.isEmpty) {
+                            return SizedBox(
+                              height: 100,
+                              child: Center(
+                                child: Text(
+                                  "No rated services yet",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 16,
                                   ),
                                 ),
-                              );
-                            }
-
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount:
-                              topRatedProduct.length > 3
-                                  ? 3
-                                  : topRatedProduct.length,
-                              itemBuilder: (context, index) {
-                                return ProductTile(
-                                  product: topRatedProduct[index],
-                                );
-                              },
+                              ),
                             );
-                          },
-                        ),
-                        const SizedBox(height: 20),
+                          }
 
-                        // All Products
-                        Row(
-                          children: [
-                            Text("All products", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20)),
-                            const Spacer(),
-                            Text("View all", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15)),
-                            const SizedBox(width: 10),
-                            Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.primary, size: 15),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: allProducts.length,
-                          itemBuilder: (context, index) {
-                            return ProductTile(product: allProducts[index]);
-                          },
-                        )
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                topRatedProduct.length > 3
+                                    ? 3
+                                    : topRatedProduct.length,
+                            itemBuilder: (context, index) {
+                              return ProductTile(
+                                product: topRatedProduct[index],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
 
-                      ],
-                    ),
+                      // All Products
+                      Row(
+                        children: [
+                          Text(
+                            "All products",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "View all",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: allProducts.length,
+                        itemBuilder: (context, index) {
+                          return ProductTile(product: allProducts[index]);
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              );
-            }
-
-            // error
-            else if (state is ProductError) {
-              return Center(child: Text(state.message));
-            } else {
-              return const Center(child: Text("Loading..."));
-            }
-
+              ),
+            );
           }
-      )
+          // error
+          else if (state is ProductError) {
+            return Center(child: Text(state.message));
+          } else {
+            return const Center(child: Text("Loading..."));
+          }
+        },
+      ),
     );
   }
 }
