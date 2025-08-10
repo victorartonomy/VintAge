@@ -50,6 +50,13 @@ class _UploadProductPageState extends State<UploadProductPage> {
   Pick file
 
    */
+  // List to store multiple images
+  List<PlatformFile> imagePickedFiles = [];
+  // List to store web images
+  List<Uint8List> webImages = [];
+
+  // Old code for reference
+  /*
   // mobile image picker
   PlatformFile? imagePickedFile;
   // web image
@@ -71,6 +78,48 @@ class _UploadProductPageState extends State<UploadProductPage> {
       });
     }
   }
+  */
+
+  // on pick image clicked
+  Future<void> pickImage() async {
+    // Don't allow more than 4 images
+    if (imagePickedFiles.length >= 4) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Maximum 4 images allowed")));
+      return;
+    }
+
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      withData: kIsWeb,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      setState(() {
+        // Calculate how many more images we can add
+        final remainingSlots = 4 - imagePickedFiles.length;
+        final newImages = result.files.take(remainingSlots).toList();
+
+        imagePickedFiles.addAll(newImages);
+
+        if (kIsWeb) {
+          webImages.addAll(newImages.map((file) => file.bytes!));
+        }
+      });
+    }
+  }
+
+  // Remove image at specific index
+  void removeImage(int index) {
+    setState(() {
+      imagePickedFiles.removeAt(index);
+      if (kIsWeb) {
+        webImages.removeAt(index);
+      }
+    });
+  }
 
   /*
 
@@ -79,8 +128,8 @@ class _UploadProductPageState extends State<UploadProductPage> {
    */
 
   void uploadProduct() {
-    // check if both image and caption are provided
-    if (imagePickedFile == null ||
+    // check if both images and other fields are provided
+    if (imagePickedFiles.isEmpty ||
         titleController.text.isEmpty ||
         descriptionController.text.isEmpty ||
         priceController.text.isEmpty ||
@@ -119,16 +168,13 @@ class _UploadProductPageState extends State<UploadProductPage> {
 
     // web upload
     if (kIsWeb) {
-      productCubit.createProduct(
-        newProduct,
-        imageBytesList: [imagePickedFile!.bytes!],
-      );
+      productCubit.createProduct(newProduct, imageBytesList: webImages);
     }
     // mobile upload
     else {
       productCubit.createProduct(
         newProduct,
-        imagePaths: [imagePickedFile!.path!],
+        imagePaths: imagePickedFiles.map((file) => file.path!).toList(),
       );
     }
   }
@@ -168,6 +214,8 @@ class _UploadProductPageState extends State<UploadProductPage> {
 
   Widget buildUploadPage() {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+
       appBar: AppBar(
         title: const Text('Upload Product'),
         centerTitle: true,
@@ -187,89 +235,122 @@ class _UploadProductPageState extends State<UploadProductPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
 
-            // Title of product
-            MyTextField(
-              controller: titleController,
-              hintText: "Enter product title",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // Description of product
-            MyTextField(
-              controller: descriptionController,
-              hintText: "Enter product description",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // Contact number of product
-            MyTextField(
-              controller: contactNumberController,
-              hintText: "Enter contact number",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // Contact email of product
-            MyTextField(
-              controller: contactEmailController,
-              hintText: "Enter contact email",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // Address of product
-            MyTextField(
-              controller: addressController,
-              hintText: "Enter product address",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // Price of product
-            MyTextField(
-              controller: priceController,
-              hintText: "Enter product price",
-              obscureText: false,
-            ),
-            const SizedBox(height: 20),
-
-            // images
-            MaterialButton(
-              onPressed: pickImage,
-              color: Theme.of(context).colorScheme.primary,
-              textColor: Theme.of(context).colorScheme.secondary,
-              child: Text("Pick Images"),
-            ),
-
-            // image preview
-            if (imagePickedFile != null)
-              Container(
-                width: double.infinity,
-                height: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child:
-                kIsWeb && webImage != null
-                    ? Image.memory(webImage!, fit: BoxFit.cover)
-                    : imagePickedFile!.path != null
-                    ? Image.file(
-                  File(imagePickedFile!.path!),
-                  fit: BoxFit.cover,
-                )
-                    : const Center(child: Text("Image selected")),
+              // Title of product
+              MyTextField(
+                controller: titleController,
+                hintText: "Enter product title",
+                obscureText: false,
               ),
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 20),
+
+              // Description of product
+              MyTextField(
+                controller: descriptionController,
+                hintText: "Enter product description",
+                obscureText: false,
+                maxLines: 10,
+              ),
+              const SizedBox(height: 20),
+
+              // Contact number of product
+              MyTextField(
+                controller: contactNumberController,
+                hintText: "Enter contact number",
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Contact email of product
+              MyTextField(
+                controller: contactEmailController,
+                hintText: "Enter contact email",
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Address of product
+              MyTextField(
+                controller: addressController,
+                hintText: "Enter product address",
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Price of product
+              MyTextField(
+                controller: priceController,
+                hintText: "Enter product price",
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // images
+              Row(
+                children: [
+                  Expanded(
+                    child: MaterialButton(
+                      onPressed: pickImage,
+                      color: Theme.of(context).colorScheme.primary,
+                      textColor: Theme.of(context).colorScheme.secondary,
+                      child: Text("Pick Images (${imagePickedFiles.length}/4)"),
+                    ),
+                  ),
+                ],
+              ),
+
+              // image previews
+              if (imagePickedFiles.isNotEmpty)
+                Container(
+                  width: double.infinity,
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: imagePickedFiles.length,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          Container(
+                            width: 200,
+                            margin: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child:
+                                kIsWeb
+                                    ? Image.memory(
+                                      webImages[index],
+                                      fit: BoxFit.cover,
+                                    )
+                                    : Image.file(
+                                      File(imagePickedFiles[index].path!),
+                                      fit: BoxFit.cover,
+                                    ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.close),
+                              color: Colors.red,
+                              onPressed: () => removeImage(index),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

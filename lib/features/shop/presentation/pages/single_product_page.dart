@@ -10,6 +10,7 @@ import '../../../profile/domain/entities/profile_user.dart';
 import '../../../services/presentation/components/custom_button.dart';
 import '../../domain/entities/product.dart';
 import '../cubits/product_cubit.dart';
+import 'image_viewer_page.dart';
 
 class SingleProductPage extends StatefulWidget {
   final Product product;
@@ -81,20 +82,87 @@ class _SingleProductPageState extends State<SingleProductPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // image
-            Container(
-              height: 400,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(widget.product.imagesUrl[0]),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(60),
-                  bottomRight: Radius.circular(60),
+            // Main image
+            GestureDetector(
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => ImageViewerPage(
+                            images: widget.product.imagesUrl,
+                            initialIndex: 0,
+                          ),
+                    ),
+                  ),
+              child: Container(
+                height: 400,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(widget.product.imagesUrl[0]),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(60),
+                    bottomRight: Radius.circular(60),
+                  ),
                 ),
               ),
             ),
+
+            // Gallery Section
+            if (widget.product.imagesUrl.length > 1) ...[
+              const SizedBox(height: 20),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              //   child: Text(
+              //     "Gallery",
+              //     style: TextStyle(
+              //       color: Theme.of(context).colorScheme.primary,
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 10),
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.product.imagesUrl.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => ImageViewerPage(
+                                    images: widget.product.imagesUrl,
+                                    initialIndex: index,
+                                  ),
+                            ),
+                          ),
+                      child: Container(
+                        width: 100,
+                        margin: const EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              widget.product.imagesUrl[index],
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
 
             // title
             SizedBox(height: 20),
