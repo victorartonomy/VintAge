@@ -297,24 +297,25 @@ class _SingleProductPageState extends State<SingleProductPage> {
             ),
             SizedBox(height: 10),
             // email
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  Icon(
-                    IconoirIcons.mail,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    widget.product.contactEmail,
-                    style: TextStyle(
+            if (widget.product.contactEmail.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      IconoirIcons.mail,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                  ),
-                ],
+                    SizedBox(width: 10),
+                    Text(
+                      widget.product.contactEmail,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
             SizedBox(height: 10),
           ],
         ),

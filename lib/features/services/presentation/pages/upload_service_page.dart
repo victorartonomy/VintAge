@@ -77,12 +77,14 @@ class _UploadServicePageState extends State<UploadServicePage> {
         descriptionController.text.isEmpty ||
         lstServicesController.text.isEmpty ||
         contactNumberController.text.isEmpty ||
-        contactEmailController.text.isEmpty ||
-        websiteController.text.isEmpty ||
         timingController.text.isEmpty ||
         addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please provide all the fields")),
+        const SnackBar(
+          content: Text(
+            "Please provide all required fields (email and website URL are optional)",
+          ),
+        ),
       );
       return;
     }
@@ -245,18 +247,18 @@ class _UploadServicePageState extends State<UploadServicePage> {
             ),
             const SizedBox(height: 10),
 
-            // contact email
+            // contact email (optional)
             MyTextField(
               controller: contactEmailController,
-              hintText: "Enter contact email",
+              hintText: "Enter contact email (optional)",
               obscureText: false,
             ),
             const SizedBox(height: 10),
 
-            // Website
+            // Website (optional)
             MyTextField(
               controller: websiteController,
-              hintText: "Enter website URL",
+              hintText: "Enter website URL (optional)",
               obscureText: false,
             ),
             const SizedBox(height: 10),
