@@ -191,10 +191,10 @@ class _ProductTileState extends State<ProductTile> {
 
                       // price
                       Text(
-                        "${widget.product.price} ₹",
+                        "₹${widget.product.price}",
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

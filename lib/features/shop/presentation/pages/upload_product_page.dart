@@ -128,14 +128,18 @@ class _UploadProductPageState extends State<UploadProductPage> {
    */
 
   void uploadProduct() {
-    // check if both images and other fields are provided
+    // check if required fields are provided
     if (imagePickedFiles.isEmpty ||
         titleController.text.isEmpty ||
         descriptionController.text.isEmpty ||
         priceController.text.isEmpty ||
         contactNumberController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please provide all the required fields")),
+        const SnackBar(
+          content: Text(
+            "Please provide all the required fields (email is optional)",
+          ),
+        ),
       );
       return;
     }
@@ -221,6 +225,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
         actions: [
           CustomButton(
             icon: IconoirIcons.upload,
@@ -253,7 +258,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
                 controller: descriptionController,
                 hintText: "Enter product description",
                 obscureText: false,
-                maxLines: 10,
+                maxLines: null,
               ),
               const SizedBox(height: 20),
 
@@ -265,10 +270,10 @@ class _UploadProductPageState extends State<UploadProductPage> {
               ),
               const SizedBox(height: 20),
 
-              // Contact email of product
+              // Contact email of product (optional)
               MyTextField(
                 controller: contactEmailController,
-                hintText: "Enter contact email",
+                hintText: "Enter contact email (optional)",
                 obscureText: false,
               ),
               const SizedBox(height: 20),
