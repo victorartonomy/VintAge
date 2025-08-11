@@ -6,6 +6,7 @@ import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -122,7 +123,7 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
   // BUILD UI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).colorScheme.secondary,
 

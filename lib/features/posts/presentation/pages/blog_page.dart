@@ -6,6 +6,7 @@ import 'package:vintage/features/posts/presentation/components/blog_tile.dart';
 import 'package:vintage/features/posts/presentation/pages/upload_blog_page.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 
+import '../../../../responsive/constrained_scaffold.dart';
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../cubits/post_cubits.dart';
@@ -47,7 +48,7 @@ class _BlogPageState extends State<BlogPage> {
   Widget build(BuildContext context) {
     final blogController = PageController(initialPage: 0);
 
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       // appbar

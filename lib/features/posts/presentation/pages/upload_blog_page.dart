@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/components/my_text_field.dart';
@@ -134,7 +135,7 @@ class _UploadBlogPageState extends State<UploadBlogPage> {
   }
 
   Widget buildUploadPage() {
-    return Scaffold(
+    return ConstrainedScaffold(
 
       backgroundColor: Theme.of(context).colorScheme.secondary,
 

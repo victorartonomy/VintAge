@@ -6,6 +6,7 @@ import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.d
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/features/services/presentation/components/service_tile.dart';
 import 'package:vintage/features/services/presentation/pages/upload_service_page.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../cubits/service_cubit.dart';
 import '../cubits/service_states.dart';
@@ -42,7 +43,7 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       // app bar

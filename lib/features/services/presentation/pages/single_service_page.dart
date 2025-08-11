@@ -6,7 +6,7 @@ import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.d
 import 'package:vintage/features/profile/domain/entities/profile_user.dart';
 import 'package:vintage/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:vintage/features/services/domain/entities/service.dart';
-
+import 'package:vintage/responsive/constrained_scaffold.dart';
 import '../components/custom_button.dart';
 import '../components/rating_widget.dart';
 import '../cubits/service_cubit.dart';
@@ -54,7 +54,7 @@ class _SingleServicePageState extends State<SingleServicePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(

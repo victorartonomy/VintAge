@@ -11,6 +11,7 @@ import 'package:vintage/features/authentication/presentation/components/my_text_
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/features/shop/domain/entities/product.dart';
 import 'package:vintage/features/shop/presentation/cubits/product_states.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../cubits/product_cubit.dart';
@@ -217,7 +218,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
   }
 
   Widget buildUploadPage() {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(

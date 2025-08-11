@@ -8,6 +8,7 @@ import 'package:vintage/features/authentication/presentation/components/my_text_
 import 'package:vintage/features/services/domain/entities/service.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/features/services/presentation/cubits/service_states.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -176,7 +177,7 @@ class _UploadServicePageState extends State<UploadServicePage> {
   }
 
   Widget buildUploadPage() {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       // appbar

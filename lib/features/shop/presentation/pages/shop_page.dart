@@ -5,6 +5,7 @@ import 'package:vintage/features/services/presentation/components/custom_button.
 import 'package:vintage/features/shop/presentation/components/product_tile.dart';
 import 'package:vintage/features/shop/presentation/cubits/product_states.dart';
 import 'package:vintage/features/shop/presentation/pages/upload_product_page.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
@@ -42,7 +43,7 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(

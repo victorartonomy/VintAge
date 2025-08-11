@@ -4,6 +4,7 @@ import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:vintage/features/shop/presentation/components/rating_widget_product.dart';
+import '../../../../responsive/constrained_scaffold.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../../../profile/domain/entities/profile_user.dart';
 import '../../../services/presentation/components/custom_button.dart';
@@ -54,7 +55,7 @@ class _SingleProductPageState extends State<SingleProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
 
 class ImageViewerPage extends StatefulWidget {
   final List<String> images;
@@ -33,7 +34,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
