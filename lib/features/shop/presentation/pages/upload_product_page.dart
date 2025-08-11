@@ -310,7 +310,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
 
               // image previews
               if (imagePickedFiles.isNotEmpty)
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 200,
                   child: ListView.builder(

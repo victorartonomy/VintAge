@@ -77,15 +77,6 @@ class _HomePageState extends State<HomePage> {
             },
             selectedItem: item,
           ),
-          // WillPopScope(
-            // onWillPop: () async {
-            //   if (isDrawerOpen) {
-            //     closeDrawer();
-            //     return false;
-            //   } else {
-            //     return true;
-            //   }
-            // },
           PopScope<Object?>(
             canPop: !isDrawerOpen,
             onPopInvokedWithResult: (bool didPop, Object? result) {
