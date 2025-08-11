@@ -213,18 +213,6 @@ class _BlogPageState extends State<BlogPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // SizedBox(
-                    //   height: 200,
-                    //   child: ListView.builder(
-                    //     shrinkWrap: true,
-                    //     itemCount: likedPosts.length,
-                    //     scrollDirection: Axis.horizontal,
-                    //     itemBuilder: (context, index) {
-                    //       return BlogTile(post: likedPosts[index]);
-                    //     },
-                    //   ),
-                    // ),
-                    const SizedBox(height: 20),
 
                     // all Blogs
                     Row(
