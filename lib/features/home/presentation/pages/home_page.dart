@@ -8,6 +8,8 @@ import 'package:vintage/features/search/presentation/pages/search_page.dart';
 import 'package:vintage/features/services/presentation/pages/services_page.dart';
 import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
 import 'package:vintage/features/shop/presentation/pages/shop_page.dart';
+import 'package:vintage/responsive/constrained_scaffold.dart';
+import 'package:vintage/responsive/constrained_web_scaffold.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../components/drawer_items.dart';
 
@@ -64,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     if (user == null) return const SizedBox(); // or a loading/error widget
     String uid = user.uid;
 
-    return Scaffold(
+    return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
 
       // BODY
