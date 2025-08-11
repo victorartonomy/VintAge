@@ -47,6 +47,7 @@ class _BlogPageState extends State<BlogPage> {
   @override
   Widget build(BuildContext context) {
     final blogController = PageController(initialPage: 0);
+    final favBlogController = PageController(initialPage: 0);
 
     return ConstrainedScaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -173,45 +174,6 @@ class _BlogPageState extends State<BlogPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    // You may/will like these
-                    Row(
-                      children: [
-                        Text(
-                          "You may like these",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        // Text(
-                        //   "View All",
-                        //   style: TextStyle(
-                        //     color: Colors.white70,
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        // const SizedBox(width: 10),
-                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Blogs
-                    SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: allPosts.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return BlogTile(post: allPosts[index]);
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
                     // favourite Blogs
                     Row(
                       children: [
@@ -224,31 +186,44 @@ class _BlogPageState extends State<BlogPage> {
                           ),
                         ),
                         Spacer(),
-                        // Text(
-                        //   "View All",
-                        //   style: TextStyle(
-                        //     color: Colors.white70,
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        // const SizedBox(width: 10),
-                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
                       ],
                     ),
                     const SizedBox(height: 12),
                     // Blogs
                     SizedBox(
                       height: 200,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: likedPosts.length,
+                      child: PageView.builder(
                         scrollDirection: Axis.horizontal,
+                        itemCount: likedPosts.length,
+                        controller: favBlogController,
                         itemBuilder: (context, index) {
+                          // blog
                           return BlogTile(post: likedPosts[index]);
                         },
                       ),
                     ),
+                    SmoothPageIndicator(
+                      controller: favBlogController,
+                      count: likedPosts.length,
+                      effect: ExpandingDotsEffect(
+                        activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                        dotColor: Theme.of(context).colorScheme.primary,
+                        dotHeight: 10,
+                        dotWidth: 10,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // SizedBox(
+                    //   height: 200,
+                    //   child: ListView.builder(
+                    //     shrinkWrap: true,
+                    //     itemCount: likedPosts.length,
+                    //     scrollDirection: Axis.horizontal,
+                    //     itemBuilder: (context, index) {
+                    //       return BlogTile(post: likedPosts[index]);
+                    //     },
+                    //   ),
+                    // ),
                     const SizedBox(height: 20),
 
                     // all Blogs
