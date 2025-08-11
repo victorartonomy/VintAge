@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:vintage/features/authentication/domain/entities/app_user.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
@@ -20,6 +21,10 @@ class ServicesPage extends StatefulWidget {
 }
 
 class _ServicesPageState extends State<ServicesPage> {
+  // Controllers
+  late final favServiceController = PageController(initialPage: 0);
+  late final topRatedServiceController = PageController(initialPage: 0);
+
   // cubits
   late final serviceCubit = context.read<ServiceCubit>();
 
@@ -148,15 +153,29 @@ class _ServicesPageState extends State<ServicesPage> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: likedServices.length,
-                      itemBuilder: (context, index) {
-                        return ServiceTile(service: likedServices[index]);
-                      },
+
+                    SizedBox(
+                      height: 300,
+                      child: PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: likedServices.length,
+                        controller: favServiceController,
+                        itemBuilder: (context, index) {
+                          // blog
+                          return ServiceTile(service: likedServices[index]);
+                        },
+                      ),
                     ),
-                    const SizedBox(height: 20),
+                    SmoothPageIndicator(
+                      controller: favServiceController,
+                      count: likedServices.length,
+                      effect: ExpandingDotsEffect(
+                        activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                        dotColor: Theme.of(context).colorScheme.primary,
+                        dotHeight: 10,
+                        dotWidth: 10,
+                      ),
+                    ),
 
                     // Top Rated Services
                     Row(
@@ -214,22 +233,55 @@ class _ServicesPageState extends State<ServicesPage> {
                           );
                         }
 
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount:
-                              topRatedServices.length > 3
-                                  ? 3
-                                  : topRatedServices.length,
-                          itemBuilder: (context, index) {
-                            return ServiceTile(
-                              service: topRatedServices[index],
-                            );
-                          },
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 300,
+                              child: PageView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: topRatedServices.length,
+                                controller: topRatedServiceController,
+                                itemBuilder: (context, index) {
+                                  // blog
+                                  return ServiceTile(
+                                    service: topRatedServices[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            SmoothPageIndicator(
+                              controller: topRatedServiceController,
+                              count: topRatedServices.length,
+                              effect: ExpandingDotsEffect(
+                                activeDotColor: Color.fromARGB(
+                                  255,
+                                  255,
+                                  90,
+                                  90,
+                                ),
+                                dotColor: Theme.of(context).colorScheme.primary,
+                                dotHeight: 10,
+                                dotWidth: 10,
+                              ),
+                            ),
+                          ],
                         );
+
+                        // return ListView.builder(
+                        //   shrinkWrap: true,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemCount:
+                        //       topRatedServices.length > 3
+                        //           ? 3
+                        //           : topRatedServices.length,
+                        //   itemBuilder: (context, index) {
+                        //     return ServiceTile(
+                        //       service: topRatedServices[index],
+                        //     );
+                        //   },
+                        // );
                       },
                     ),
-                    const SizedBox(height: 20),
 
                     // All Services
                     Row(

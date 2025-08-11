@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/features/shop/presentation/components/product_tile.dart';
 import 'package:vintage/features/shop/presentation/cubits/product_states.dart';
@@ -20,6 +21,10 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  // Controllers
+  late final likedProductsController = PageController(initialPage: 0);
+  late final topRatedProductController = PageController(initialPage: 0);
+
   // cubits
   late final productCubit = context.read<ProductCubit>();
 
@@ -143,14 +148,38 @@ class _ShopPageState extends State<ShopPage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: likedProducts.length,
-                        itemBuilder: (context, index) {
-                          return ProductTile(product: likedProducts[index]);
-                        },
+
+                      SizedBox(
+                        height: 220,
+                        child: PageView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: likedProducts.length,
+                          controller: likedProductsController,
+                          itemBuilder: (context, index) {
+                            // blog
+                            return ProductTile(product: likedProducts[index]);
+                          },
+                        ),
                       ),
+                      SmoothPageIndicator(
+                        controller: likedProductsController,
+                        count: likedProducts.length,
+                        effect: ExpandingDotsEffect(
+                          activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                          dotColor: Theme.of(context).colorScheme.primary,
+                          dotHeight: 10,
+                          dotWidth: 10,
+                        ),
+                      ),
+
+                      // ListView.builder(
+                      //   shrinkWrap: true,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   itemCount: likedProducts.length,
+                      //   itemBuilder: (context, index) {
+                      //     return ProductTile(product: likedProducts[index]);
+                      //   },
+                      // ),
 
                       // Top Rated Products
                       Row(
@@ -208,19 +237,54 @@ class _ShopPageState extends State<ShopPage> {
                             );
                           }
 
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount:
-                                topRatedProduct.length > 3
-                                    ? 3
-                                    : topRatedProduct.length,
-                            itemBuilder: (context, index) {
-                              return ProductTile(
-                                product: topRatedProduct[index],
-                              );
-                            },
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: 220,
+                                child: PageView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: topRatedProduct.length,
+                                  controller: topRatedProductController,
+                                  itemBuilder: (context, index) {
+                                    // blog
+                                    return ProductTile(
+                                      product: topRatedProduct[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                              SmoothPageIndicator(
+                                controller: topRatedProductController,
+                                count: topRatedProduct.length,
+                                effect: ExpandingDotsEffect(
+                                  activeDotColor: Color.fromARGB(
+                                    255,
+                                    255,
+                                    90,
+                                    90,
+                                  ),
+                                  dotColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  dotHeight: 10,
+                                  dotWidth: 10,
+                                ),
+                              ),
+                            ],
                           );
+
+                          // return ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   itemCount:
+                          //       topRatedProduct.length > 3
+                          //           ? 3
+                          //           : topRatedProduct.length,
+                          //   itemBuilder: (context, index) {
+                          //     return ProductTile(
+                          //       product: topRatedProduct[index],
+                          //     );
+                          //   },
+                          // );
                         },
                       ),
                       const SizedBox(height: 10),
