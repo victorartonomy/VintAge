@@ -2,7 +2,8 @@
   {
     "origin": [
       "http://localhost:59500",
-      "http://localhost:*"
+      "http://localhost:*",
+      "https://vintage-c55d3.web.app"
     ],
     "method": ["GET", "HEAD"],
     "maxAgeSeconds": 3600

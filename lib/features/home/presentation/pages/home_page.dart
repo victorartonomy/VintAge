@@ -9,7 +9,6 @@ import 'package:vintage/features/services/presentation/pages/services_page.dart'
 import 'package:vintage/features/settings/presentation/pages/settings_page.dart';
 import 'package:vintage/features/shop/presentation/pages/shop_page.dart';
 import 'package:vintage/responsive/constrained_scaffold.dart';
-import 'package:vintage/responsive/constrained_web_scaffold.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../components/drawer_items.dart';
 

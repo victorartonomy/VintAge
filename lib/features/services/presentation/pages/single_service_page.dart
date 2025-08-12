@@ -58,7 +58,7 @@ class _SingleServicePageState extends State<SingleServicePage> {
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent.withAlpha(100),
         title: Text(widget.service.title),
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios),
@@ -336,17 +336,18 @@ class _SingleServicePageState extends State<SingleServicePage> {
             ),
             SizedBox(height: 10),
 
-            // book now
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: CustomButton(
-                text: "Call Now",
-                icon: IconoirIcons.phone,
-                onTap: () {},
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
+            // call now
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //   child: CustomButton(
+            //     text: "Call Now",
+            //     icon: IconoirIcons.phone,
+            //     onTap: () {},
+            //     backgroundColor: Colors.redAccent,
+            //     foregroundColor: Theme.of(context).colorScheme.secondary,
+            //   ),
+            // ),
+
             SizedBox(height: 20),
           ],
         ),

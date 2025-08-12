@@ -59,7 +59,7 @@ class _SingleProductPageState extends State<SingleProductPage> {
       backgroundColor: Theme.of(context).colorScheme.secondary,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent.withAlpha(50),
         title: Text(widget.product.title),
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios),
