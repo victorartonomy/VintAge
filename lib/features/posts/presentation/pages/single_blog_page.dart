@@ -7,7 +7,6 @@ import 'package:vintage/features/authentication/presentation/components/my_text_
 import 'package:vintage/features/posts/presentation/components/comment_tile.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 import 'package:vintage/responsive/constrained_scaffold.dart';
-
 import '../../../authentication/domain/entities/app_user.dart';
 import '../../../authentication/presentation/cubits/auth_cubit.dart';
 import '../../../profile/domain/entities/profile_user.dart';

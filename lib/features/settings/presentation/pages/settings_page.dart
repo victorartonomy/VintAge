@@ -66,6 +66,32 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
+
+          const Spacer(),
+
+          // Copyright
+          Column(
+            children: [
+              Text(
+                "© 2025 Kare Nursing Services.",
+                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Made By ",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  Text(
+                    "VictorArtonomy",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 40,)
         ],
       ),
     );

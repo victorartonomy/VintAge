@@ -125,6 +125,16 @@ class _RegisterPage extends State<RegisterPage> {
                   // ),
                   // SizedBox(height: 10),
 
+                  Text(
+                    "A Kare Nursing Services initiative",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(height: 25),
+
                   // Welcome
                   Text(
                     "Welcome",

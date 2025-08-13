@@ -109,6 +109,17 @@ class _LoginPageState extends State<LoginPage> {
                   //   color: Theme.of(context).colorScheme.primary,
                   // ),
                   SizedBox(height: 25),
+
+                  // Welcome
+                  Text(
+                    "A Kare Nursing Services initiative",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(height: 25),
         
                   // Welcome
                   Text(
