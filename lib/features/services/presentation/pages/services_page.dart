@@ -152,7 +152,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
                     SizedBox(
                       height: 300,
@@ -205,7 +205,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     // Get top rated services (services with ratings > 0, sorted by average rating)
                     Builder(
                       builder: (context) {
@@ -311,7 +311,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
