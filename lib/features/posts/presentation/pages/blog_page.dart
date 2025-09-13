@@ -149,7 +149,7 @@ class _BlogPageState extends State<BlogPage> {
                       height: 200,
                       child: PageView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 4,
+                        itemCount: allPosts.take(4).toList().length,
                         controller: blogController,
                         itemBuilder: (context, index) {
                           // get final blog
