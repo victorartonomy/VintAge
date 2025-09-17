@@ -106,7 +106,7 @@ class _ServiceTileState extends State<ServiceTile> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: 300,
+          height: 350,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -142,6 +142,8 @@ class _ServiceTileState extends State<ServiceTile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+                      // like button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -162,15 +164,21 @@ class _ServiceTileState extends State<ServiceTile> {
                         ],
                       ),
                       const Spacer(),
+
+                      // title
                       Text(
                         widget.service.title,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 30,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 10),
+                      const Spacer(),
+
+                      // service user info
                       SizedBox(
                         height: 50,
                         child: ListView.builder(
@@ -201,6 +209,7 @@ class _ServiceTileState extends State<ServiceTile> {
                         ),
                       ),
                       const SizedBox(height: 10),
+
                       // Rating widget
                       RatingWidget(
                         service: widget.service,
@@ -208,6 +217,8 @@ class _ServiceTileState extends State<ServiceTile> {
                         color: Colors.amber,
                       ),
                       const SizedBox(height: 10),
+
+                      // description
                       Expanded(
                         child: Text(
                           widget.service.description,

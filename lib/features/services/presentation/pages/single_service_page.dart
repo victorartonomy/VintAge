@@ -304,10 +304,14 @@ class _SingleServicePageState extends State<SingleServicePage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     SizedBox(width: 10),
-                    Text(
-                      widget.service.website,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                    SizedBox(
+                      width: 290,
+                      child: Text(
+                        widget.service.website,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

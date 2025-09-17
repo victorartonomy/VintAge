@@ -124,6 +124,7 @@ class _ServicesPageState extends State<ServicesPage> {
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: <Widget>[
+
                     // Favourites
                     Row(
                       children: [
@@ -161,8 +162,21 @@ class _ServicesPageState extends State<ServicesPage> {
                         itemCount: likedServices.length,
                         controller: favServiceController,
                         itemBuilder: (context, index) {
-                          // blog
-                          return ServiceTile(service: likedServices[index]);
+                          // Services builder
+                          if (likedServices.isNotEmpty) {
+                            return ServiceTile(service: likedServices[index]);
+                          } else {
+                            return const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(IconoirIcons.suitcase, size: 100),
+                                  SizedBox(height: 20),
+                                  Text("Click on the heart icon to like a service..."),
+                                ],
+                              ),
+                            );
+                          }
                         },
                       ),
                     ),
@@ -206,6 +220,7 @@ class _ServicesPageState extends State<ServicesPage> {
                       ],
                     ),
                     const SizedBox(height: 10),
+
                     // Get top rated services (services with ratings > 0, sorted by average rating)
                     Builder(
                       builder: (context) {
@@ -266,20 +281,6 @@ class _ServicesPageState extends State<ServicesPage> {
                             ),
                           ],
                         );
-
-                        // return ListView.builder(
-                        //   shrinkWrap: true,
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   itemCount:
-                        //       topRatedServices.length > 3
-                        //           ? 3
-                        //           : topRatedServices.length,
-                        //   itemBuilder: (context, index) {
-                        //     return ServiceTile(
-                        //       service: topRatedServices[index],
-                        //     );
-                        //   },
-                        // );
                       },
                     ),
 
