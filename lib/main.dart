@@ -13,7 +13,8 @@ void main() async {
   await FirebaseAppCheck.instance.activate(
     // androidProvider: AndroidProvider.debug,
     androidProvider: AndroidProvider.playIntegrity,
-    appleProvider: AppleProvider.deviceCheck
+    appleProvider: AppleProvider.deviceCheck,
+    webProvider: ReCaptchaV3Provider('6LcVms8rAAAAAPkjcq9XgECF7JF5GkNqjJG5eSim'),
   );
 
   // run app
