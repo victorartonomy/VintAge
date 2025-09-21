@@ -3,7 +3,8 @@
     "origin": [
       "http://localhost:59500",
       "http://localhost:*",
-      "https://vintage-c55d3.web.app"
+      "https://vintage-c55d3.web.app",
+      "https://karevintage.com"
     ],
     "method": ["GET", "HEAD"],
     "maxAgeSeconds": 3600
