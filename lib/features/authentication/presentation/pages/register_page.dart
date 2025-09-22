@@ -16,6 +16,7 @@ If user doesn't have an account, they can register.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vintage/features/authentication/presentation/components/header.dart';
 import 'package:vintage/features/authentication/presentation/components/my_button.dart';
 import 'package:vintage/features/authentication/presentation/components/my_text_field.dart';
 import 'package:vintage/features/authentication/presentation/cubits/auth_cubit.dart';
@@ -82,13 +83,6 @@ class _RegisterPage extends State<RegisterPage> {
     super.dispose();
   }
 
-  static const ColorFilter _inversionColorFilter = ColorFilter.matrix(<double>[
-    -1,  0,  0, 0, 255, // Red channel
-    0, -1,  0, 0, 255, // Green channel
-    0,  0, -1, 0, 255, // Blue channel
-    0,  0,  0, 1,   0, // Alpha channel
-  ]);
-
   @override
   Widget build(BuildContext context) {
     final themeCubit = context.watch<ThemeCubit>();
@@ -106,44 +100,7 @@ class _RegisterPage extends State<RegisterPage> {
                 children: [
                   // Logo
 
-                  Container(
-                    height: 260,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/logo2.png"),
-                        fit: BoxFit.fitWidth,
-                        colorFilter: isDarkMode? _inversionColorFilter:null,
-                      ),
-                    ),
-                  ),
-
-                  // Icon(
-                  //   Icons.flutter_dash,
-                  //   size: 120,
-                  //   color: Theme.of(context).colorScheme.primary,
-                  // ),
-                  // SizedBox(height: 10),
-
-                  Text(
-                    "A Kare Nursing Services initiative",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  SizedBox(height: 25),
-
-                  // Welcome
-                  Text(
-                    "Welcome",
-                    style: TextStyle(
-                      fontSize: 40,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  SizedBox(height: 25),
+                  Header(isDarkMode: isDarkMode,),
 
                   // Name
                   MyTextField(
