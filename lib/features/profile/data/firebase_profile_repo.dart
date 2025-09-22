@@ -29,6 +29,7 @@ class FirebaseProfileRepo implements ProfileRepository{
             profileImageUrl: userData['profileImageUrl'].toString(),
             followers: followers,
             following: following,
+            isAuthor: userData['isAuthor'] ?? false,
           );
         }
       }

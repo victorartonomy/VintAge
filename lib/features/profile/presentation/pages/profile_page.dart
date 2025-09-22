@@ -110,7 +110,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
             // app bar
             appBar: AppBar(
-
               automaticallyImplyLeading: true,
 
               backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -184,6 +183,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                 ),
                 const SizedBox(height: 25),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [Text("Author: "), Text(user.isAuthor.toString())],
+                // ),
+                // const SizedBox(height: 25),
 
                 // profile stats
                 ProfileStats(

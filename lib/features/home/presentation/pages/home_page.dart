@@ -143,9 +143,9 @@ class _HomePageState extends State<HomePage> {
   Widget getDrawerPage(String uid) {
     switch (item) {
       case DrawerItems.blog:
-        return BlogPage(openDrawer: openDrawer);
+        return BlogPage(uid: uid, openDrawer: openDrawer);
       case DrawerItems.services:
-        return ServicesPage(openDrawer: openDrawer);
+        return ServicesPage(uid: uid, openDrawer: openDrawer);
       case DrawerItems.profile:
         return ProfilePage(uid: uid, openDrawer: openDrawer);
       case DrawerItems.search:
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
       case DrawerItems.logout:
         return logout();
       default:
-        return BlogPage(openDrawer: openDrawer);
+        return BlogPage(uid: uid, openDrawer: openDrawer);
     }
   }
 

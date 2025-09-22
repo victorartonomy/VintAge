@@ -89,6 +89,19 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Version: ",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  Text(
+                    "1.0.0",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ],
           ),
           const SizedBox(height: 40,)

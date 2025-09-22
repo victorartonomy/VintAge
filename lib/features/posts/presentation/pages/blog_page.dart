@@ -4,6 +4,8 @@ import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:vintage/features/posts/presentation/components/blog_tile.dart';
 import 'package:vintage/features/posts/presentation/pages/upload_blog_page.dart';
+import 'package:vintage/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:vintage/features/profile/presentation/cubits/profile_states.dart';
 import 'package:vintage/features/services/presentation/components/custom_button.dart';
 
 import '../../../../responsive/constrained_scaffold.dart';
@@ -13,16 +15,18 @@ import '../cubits/post_cubits.dart';
 import '../cubits/post_states.dart';
 
 class BlogPage extends StatefulWidget {
+  final String uid;
   final VoidCallback openDrawer;
-  const BlogPage({super.key, required this.openDrawer});
+  const BlogPage({super.key, required this.openDrawer, required this.uid});
 
   @override
   State<BlogPage> createState() => _BlogPageState();
 }
 
 class _BlogPageState extends State<BlogPage> {
-  // post cubit
+  // cubits
   late final postCubit = context.read<PostCubit>();
+  late final profileCubit = context.read<ProfileCubit>();
 
   AppUser? currentUser;
 
@@ -37,6 +41,9 @@ class _BlogPageState extends State<BlogPage> {
     // get current user
     final authCubit = context.read<AuthCubit>();
     currentUser = authCubit.currentUser;
+
+    // load user profile
+    profileCubit.fetchUserProfile(widget.uid);
   }
 
   // fetch all posts
@@ -49,234 +56,254 @@ class _BlogPageState extends State<BlogPage> {
     final blogController = PageController(initialPage: 0);
     final favBlogController = PageController(initialPage: 0);
 
-    return ConstrainedScaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+    return BlocBuilder<ProfileCubit, ProfileStates>(
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          final user = state.profileUser;
 
-      // appbar
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: widget.openDrawer,
-          icon: const Icon(IconoirIcons.menuScale),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(IconoirIcons.book),
-            SizedBox(width: 8),
-            Text("Blog"),
-          ],
-        ),
-        centerTitle: true,
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        actions: [
-          CustomButton(
-            icon: IconoirIcons.upload,
-            text: "Upload",
-            backgroundColor: Colors.green[400],
-            foregroundColor: Theme.of(context).colorScheme.secondary,
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UploadBlogPage(),
-                  ),
-                ),
-          ),
-        ],
-        actionsPadding: const EdgeInsets.only(right: 20),
-      ),
+          return ConstrainedScaffold(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
 
-      // body
-      body: BlocBuilder<PostCubit, PostStates>(
-        builder: (context, state) {
-          // loading
-          if (state is PostsLoading && state is PostsUploading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          // loaded
-          else if (state is PostsLoaded) {
-            final allPosts = state.posts;
-            final likedPosts =
-                allPosts
-                    .where((post) => post.likes.contains(currentUser?.uid))
-                    .toList();
-
-            if (allPosts.isEmpty) {
-              return const Center(child: Text("No posts available"));
-            }
-
-            return RefreshIndicator(
-              onRefresh: () {
-                fetchAllPosts();
-                return Future.value();
-              },
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    // Recent Blogs
-                    Row(
-                      children: [
-                        Text(
-                          "Recent Blogs",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          "View All",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 15,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Most recent Blogs
-                    SizedBox(
-                      height: 200,
-                      child: PageView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: allPosts.take(4).toList().length,
-                        controller: blogController,
-                        itemBuilder: (context, index) {
-                          // get final blog
-                          final post = allPosts.take(4).toList();
-
-                          // blog
-                          return BlogTile(post: post[index]);
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // page indicator
-                    SmoothPageIndicator(
-                      controller: blogController,
-                      count: 4,
-                      effect: ExpandingDotsEffect(
-                        activeDotColor: Color.fromARGB(255, 255, 90, 90),
-                        dotColor: Theme.of(context).colorScheme.primary,
-                        dotHeight: 10,
-                        dotWidth: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // favourite Blogs
-                    Row(
-                      children: [
-                        Text(
-                          "Your Favourite's",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Blogs
-                    SizedBox(
-                      height: 200,
-                      child: PageView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: likedPosts.length,
-                        controller: favBlogController,
-                        itemBuilder: (context, index) {
-                          // blog
-                          return BlogTile(post: likedPosts[index]);
-                        },
-                      ),
-                    ),
-                    SmoothPageIndicator(
-                      controller: favBlogController,
-                      count: likedPosts.length,
-                      effect: ExpandingDotsEffect(
-                        activeDotColor: Color.fromARGB(255, 255, 90, 90),
-                        dotColor: Theme.of(context).colorScheme.primary,
-                        dotHeight: 10,
-                        dotWidth: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // all Blogs
-                    Row(
-                      children: [
-                        Text(
-                          "All Blogs",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        // Text(
-                        //   "View All",
-                        //   style: TextStyle(
-                        //     color: Colors.white70,
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        // const SizedBox(width: 10),
-                        // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    ListView.builder(
-                      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      //   crossAxisCount: 2, // Number of columns
-                      //   crossAxisSpacing: 10.0,
-                      //   mainAxisSpacing: 10.0,
-                      //   childAspectRatio: 1.0, // Width/height ratio
-                      // ),
-                      shrinkWrap: true,
-                      itemCount: allPosts.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return BlogTile(post: allPosts[index]);
-                      },
-                    ),
-                    const SizedBox(height: 20),
-
-                    // The End
-                    Text(
-                      "The End!",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+            // appbar
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: widget.openDrawer,
+                icon: const Icon(IconoirIcons.menuScale),
               ),
-            );
-          }
-          // error
-          else if (state is PostsError) {
-            return Center(child: Text(state.message));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(IconoirIcons.book),
+                  SizedBox(width: 8),
+                  Text("Blog"),
+                ],
+              ),
+              centerTitle: true,
+              foregroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              actions: [
+                if (user.isAuthor)
+                  CustomButton(
+                    icon: IconoirIcons.upload,
+                    text: "Upload",
+                    backgroundColor: Colors.green[400],
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
+                    onTap:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UploadBlogPage(),
+                          ),
+                        ),
+                  ),
+              ],
+              actionsPadding: const EdgeInsets.only(right: 20),
+            ),
+
+            // body
+            body: BlocBuilder<PostCubit, PostStates>(
+              builder: (context, state) {
+                // loading
+                if (state is PostsLoading && state is PostsUploading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                // loaded
+                else if (state is PostsLoaded) {
+                  final allPosts = state.posts;
+                  final likedPosts =
+                      allPosts
+                          .where(
+                            (post) => post.likes.contains(currentUser?.uid),
+                          )
+                          .toList();
+
+                  if (allPosts.isEmpty) {
+                    return const Center(child: Text("No posts available"));
+                  }
+
+                  return RefreshIndicator(
+                    onRefresh: () {
+                      fetchAllPosts();
+                      return Future.value();
+                    },
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        children: <Widget>[
+                          // Recent Blogs
+                          Row(
+                            children: [
+                              Text(
+                                "Recent Blogs",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Spacer(),
+                              Text(
+                                "View All",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 15,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Most recent Blogs
+                          SizedBox(
+                            height: 200,
+                            child: PageView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: allPosts.take(4).toList().length,
+                              controller: blogController,
+                              itemBuilder: (context, index) {
+                                // get final blog
+                                final post = allPosts.take(4).toList();
+
+                                // blog
+                                return BlogTile(post: post[index]);
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          // page indicator
+                          SmoothPageIndicator(
+                            controller: blogController,
+                            count: 4,
+                            effect: ExpandingDotsEffect(
+                              activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                              dotColor: Theme.of(context).colorScheme.primary,
+                              dotHeight: 10,
+                              dotWidth: 10,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // favourite Blogs
+                          Row(
+                            children: [
+                              Text(
+                                "Your Favourite's",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Blogs
+                          SizedBox(
+                            height: 200,
+                            child: PageView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: likedPosts.length,
+                              controller: favBlogController,
+                              itemBuilder: (context, index) {
+                                // blog
+                                return BlogTile(post: likedPosts[index]);
+                              },
+                            ),
+                          ),
+                          SmoothPageIndicator(
+                            controller: favBlogController,
+                            count: likedPosts.length,
+                            effect: ExpandingDotsEffect(
+                              activeDotColor: Color.fromARGB(255, 255, 90, 90),
+                              dotColor: Theme.of(context).colorScheme.primary,
+                              dotHeight: 10,
+                              dotWidth: 10,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // all Blogs
+                          Row(
+                            children: [
+                              Text(
+                                "All Blogs",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Spacer(),
+                              // Text(
+                              //   "View All",
+                              //   style: TextStyle(
+                              //     color: Colors.white70,
+                              //     fontSize: 15,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
+                              // const SizedBox(width: 10),
+                              // Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white70),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ListView.builder(
+                            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            //   crossAxisCount: 2, // Number of columns
+                            //   crossAxisSpacing: 10.0,
+                            //   mainAxisSpacing: 10.0,
+                            //   childAspectRatio: 1.0, // Width/height ratio
+                            // ),
+                            shrinkWrap: true,
+                            itemCount: allPosts.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return BlogTile(post: allPosts[index]);
+                            },
+                          ),
+                          const SizedBox(height: 20),
+
+                          // The End
+                          Text(
+                            "The End!",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                // error
+                else if (state is PostsError) {
+                  return Center(child: Text(state.message));
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          );
+        } else if (state is ProfileLoading) {
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          return const Scaffold(
+            body: Center(child: Text('No profile found...')),
+          );
+        }
+      },
     );
   }
 }

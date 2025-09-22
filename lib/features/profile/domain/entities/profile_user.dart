@@ -5,6 +5,7 @@ class ProfileUser extends AppUser {
   final String profileImageUrl;
   final List<String> followers;
   final List<String> following;
+  final bool isAuthor;
 
   ProfileUser({
     required super.uid,
@@ -14,6 +15,7 @@ class ProfileUser extends AppUser {
     required this.profileImageUrl,
     required this.followers,
     required this.following,
+    required this.isAuthor,
   });
 
   // method to update the user
@@ -31,6 +33,7 @@ class ProfileUser extends AppUser {
       profileImageUrl: newProfileImageUrl ?? profileImageUrl,
       followers: newfollowers ?? followers,
       following: newfollowing ?? following,
+      isAuthor: isAuthor,
     );
   }
 
@@ -45,6 +48,7 @@ class ProfileUser extends AppUser {
       'profileImageUrl': profileImageUrl,
       'followers': followers,
       'following': following,
+      'isAuthor': isAuthor,
     };
   }
 
@@ -58,6 +62,7 @@ class ProfileUser extends AppUser {
       profileImageUrl: json['profileImageUrl'] ?? '',
       followers: List<String>.from(json['followers'] ?? []),
       following: List<String>.from(json['following'] ?? []),
+      isAuthor: json['isAuthor'] ?? false,
     );
   }
 }
