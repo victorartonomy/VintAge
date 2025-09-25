@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                 duration: const Duration(milliseconds: 350),
                 curve: Curves.easeInOut,
                 transform: Matrix4.translationValues(xOffset, yOffset, 0)
-                  ..scale(scaleFactor),
+                  ..scaleByDouble(scaleFactor, scaleFactor, scaleFactor, 1),
                 child: AbsorbPointer(
                   absorbing: isDrawerOpen,
                   child: ClipRRect(

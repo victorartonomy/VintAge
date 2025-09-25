@@ -76,9 +76,11 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
     );
 
     // add comment using cubit
-    if (commentController.text.isNotEmpty) {
-      postCubit.addComment(widget.post.id, newComment);
-    }
+    setState(() {
+      if (commentController.text.isNotEmpty) {
+        postCubit.addComment(widget.post.id, newComment);
+      }
+    });
 
     commentController.clear();
   }
@@ -90,6 +92,7 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
   }
 
   void toggleLike() {
+
     // current like status
     final isLiked = widget.post.likes.contains(currentUser!.uid);
 
@@ -119,8 +122,10 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
 
   // delete post
   void deletePost(String postId) {
-    postCubit.deletePost(postId);
-    Navigator.pop(context);
+    setState(() {
+      postCubit.deletePost(postId);
+      Navigator.pop(context);
+    });
   }
 
   // BUILD UI
@@ -209,7 +214,7 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
                 ),
                 SizedBox(width: 20),
                 Icon(
-                  Icons.comment,
+                  IconoirIconsBold.messageText,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 SizedBox(width: 10),
@@ -356,17 +361,13 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
 
                   // comments
                   SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Text(
-                        "Comments: ",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    "Comments: ",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                   SizedBox(height: 10),
                   BlocBuilder<PostCubit, PostStates>(
@@ -384,6 +385,7 @@ class _SingleBlogPageState extends State<SingleBlogPage> {
 
                           // comment section
                           return ListView.builder(
+                            padding: EdgeInsets.zero,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: showCommentCount,
