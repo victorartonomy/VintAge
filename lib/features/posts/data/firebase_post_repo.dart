@@ -99,54 +99,55 @@ class FirebasePostRepo implements PostRepo {
 
   @override
   Future<void> addComment(String postId, Comment comment) async {
-    // try {
-    //
-    //   // get post document
-    //   final postDoc = await postsCollection.doc(postId).get();
-    //
-    //   if (postDoc.exists) {
-    //     // convert json to post
-    //     final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
-    //
-    //     // add the new comment
-    //     post.comments.add(comment);
-    //
-    //     // update the post document in firestore
-    //     await postsCollection.doc(postId).update({
-    //       'comments': post.comments.map((comment) => comment.toJson()).toList()
-    //     });
-    //   } else {
-    //     throw Exception("Post not found");
-    //   }
-    // } catch (e) {
-    //   throw Exception("Error adding comment: $e");
-    // }
-    throw UnimplementedError();
+    try {
+
+      // get post document
+      final postDoc = await postsCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+
+        // convert json to post
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // add the new comment
+        post.comments.add(comment);
+
+        // update the post document in firestore
+        await postsCollection.doc(postId).update({
+          'comments': post.comments.map((comment) => comment.toJson()).toList()
+        });
+      } else {
+        throw Exception("Post not found");
+      }
+    } catch (e) {
+      throw Exception("Error adding comment: $e");
+    }
+    // throw UnimplementedError();
   }
 
   @override
   Future<void> deleteComment(String postId, String commentId) async {
-    // try {
-    //   // get post document
-    //   final postDoc = await postsCollection.doc(postId).get();
-    //
-    //   if (postDoc.exists) {
-    //     // convert json to post
-    //     final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
-    //
-    //     // remove the new comment
-    //     post.comments.removeWhere((comment) => comment.id == commentId);
-    //
-    //     // update the post document in firestore
-    //     await postsCollection.doc(postId).update({
-    //       'comments': post.comments.map((comment) => comment.toJson()).toList()
-    //     });
-    //   } else {
-    //     throw Exception("Post not found");
-    //   }
-    // } catch (e) {
-    //   throw Exception("Error deleting comment: $e");
-    // }
-    throw UnimplementedError();
+    try {
+      // get post document
+      final postDoc = await postsCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+        // convert json to post
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // remove the new comment
+        post.comments.removeWhere((comment) => comment.id == commentId);
+
+        // update the post document in firestore
+        await postsCollection.doc(postId).update({
+          'comments': post.comments.map((comment) => comment.toJson()).toList()
+        });
+      } else {
+        throw Exception("Post not found");
+      }
+    } catch (e) {
+      throw Exception("Error deleting comment: $e");
+    }
+    // throw UnimplementedError();
   }
 }

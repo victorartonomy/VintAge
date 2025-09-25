@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconoir_ttf/flutter_iconoir_ttf.dart';
 import 'package:vintage/features/posts/domain/entities/comment.dart';
 
 import '../../../authentication/domain/entities/app_user.dart';
@@ -73,12 +74,13 @@ class _CommentTileState extends State<CommentTile> {
     );
   }
 
+  // BUILD UI
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(10),
@@ -111,16 +113,18 @@ class _CommentTileState extends State<CommentTile> {
 
             // comment text
             SizedBox(width: 10),
-            Flexible(
-              child: Expanded(
-                child: Text(
-                  widget.comment.text,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+            SizedBox(
+              width: 250,
+              child: Text(
+                widget.comment.text,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
+                maxLines: null,
               ),
             ),
+
+            const Spacer(),
 
             // delete
             if (isOwnPost)
@@ -130,8 +134,8 @@ class _CommentTileState extends State<CommentTile> {
                   IconButton(
                     onPressed: showOptions,
                     icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).colorScheme.secondary,
+                      IconoirIconsBold.trash,
+                      color: Colors.red[400],
                     ),
                   ),
                 ],
