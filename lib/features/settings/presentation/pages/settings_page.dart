@@ -97,7 +97,7 @@ class SettingsPage extends StatelessWidget {
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                   Text(
-                    "1.0.0",
+                    "1.0.1",
                     style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
                   ),
                 ],
