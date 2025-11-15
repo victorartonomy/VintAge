@@ -1,6 +1,12 @@
 # VintAge
 **Comprehensive Support Hub for Senior Citizens.**
 
+<img width="1344" height="2992" alt="Screenshot_20250921_173929" src="https://github.com/user-attachments/assets/7ba3f79e-bb7f-4f78-af08-c75130a13cdb" />
+<img width="1344" height="2992" alt="Screenshot_20250921_174010" src="https://github.com/user-attachments/assets/bbac4e2e-e180-4a0c-8447-4f8590473394" />
+<img width="1344" height="2992" alt="Screenshot_20250921_174038" src="https://github.com/user-attachments/assets/546303f2-111b-4ec8-86b4-fd897a690016" />
+
+
+
 ## Healthcare & Wellness 
 
 ### Medical Services
